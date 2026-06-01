@@ -1,0 +1,26 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node (au cas où on ajoute une dépendance)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+package-lock.json
+
+# Claude Code session local
+.claude/
+
+# Builds / temp
+dist/
+.tmp/
+*.log
+
+# Originaux lourds (déjà compressés dans assets/)
+*.orig.jpg

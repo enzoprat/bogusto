@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Bogusto — Salse fatte bene. Plat 10€, six sauces maison à l'italienne. 7j/7 de 19h30 à 02h00. Click & Collect rapide au quartier Ginko à Bordeaux (Cours de Québec)." />
+  <title>Bogusto — Salse fatte bene · Plat 10€ · 7j/7</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Bungee&family=Poppins:wght@400;500;600;700;800&family=Caveat:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="#hero" class="logo">
+        <img src="assets/bogusto.svg" alt="Bogusto — Salse fatte bene" class="logo__img" />
+      </a>
+
+      <nav class="nav" id="nav">
+        <a href="#hero" class="nav__link">Accueil</a>
+        <a href="#menu" class="nav__link">Menu</a>
+        <a href="#compose" class="nav__link">Compose</a>
+        <a href="#livraison" class="nav__link">Adresse</a>
+        <a href="#commander" class="nav__link">Commander</a>
+      </nav>
+
+      <a href="#commander" class="btn btn--primary header__cta">
+        Commander
+        <span class="cart-badge" id="cartBadgeHeader">0</span>
+      </a>
+
+      <button class="burger" id="burger" aria-label="Ouvrir le menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="hero">
+    <div class="hero__decor hero__decor--star1" aria-hidden="true">★</div>
+    <div class="hero__decor hero__decor--star2" aria-hidden="true">✦</div>
+    <div class="hero__decor hero__decor--dots" aria-hidden="true"></div>
+
+    <div class="container hero__grid">
+      <div class="hero__content">
+        <div class="hero__badge-row">
+          <span class="badge badge--orange">📍 Quartier Ginko · Cours de Québec</span>
+          <span class="badge badge--yellow">🇮🇹 Salse fatte bene</span>
+        </div>
+
+        <h1 class="hero__title hero__title--anim">
+          <span class="hero__title-big">BOGUSTO</span>
+          <span class="hero__title-sub">Plat à <span class="hero__title-accent">10€</span></span>
+        </h1>
+
+        <p class="hero__subtitle">
+          Pâtes ou riz, sauces maison à l'italienne. Funghetto, Cremoso Pollo, Ladonna, Salmone, Salsa Fuego — la cuisine généreuse comme on l'aime, à emporter en quelques minutes.
+        </p>
+
+        <div class="hero__cta-row">
+          <a href="#commander" class="btn btn--primary btn--large">Commander maintenant</a>
+          <a href="#menu" class="btn btn--ghost btn--large">Voir le menu</a>
+        </div>
+
+        <div class="hero__features">
+          <div class="hero__feature">
+            <strong data-count-to="6" data-suffix="">0</strong>
+            <span>sauces signature</span>
+          </div>
+          <div class="hero__feature">
+            <strong data-count-to="10" data-suffix="€">0€</strong>
+            <span>le plat</span>
+          </div>
+          <div class="hero__feature">
+            <strong data-count-to="5" data-prefix="< " data-suffix="'">0'</strong>
+            <span>prêt à emporter</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__visual">
+        <div class="hero__pizza hero__pizza--logo" aria-hidden="true">
+          <img src="assets/bogusto.svg" alt="Bogusto" class="hero__logo-img" />
+        </div>
+
+        <div class="hero__bubble hero__bubble--1">
+          <span>🌿</span> Sauces <br/><strong>maison</strong>
+        </div>
+        <div class="hero__bubble hero__bubble--2">
+          <span>⚡</span> Click & <br/><strong>Collect</strong>
+        </div>
+
+        <div class="stamp stamp--frais" aria-hidden="true">
+          <span>★</span>
+          <strong>FATTE<br/>BENE</strong>
+          <span>★</span>
+        </div>
+        <div class="stamp stamp--bdx" aria-hidden="true">
+          <em>Made in</em>
+          <strong>BORDEAUX</strong>
+          <small>· cucina italiana ·</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__wave" aria-hidden="true">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none">
+        <path d="M0,40 C240,100 480,0 720,40 C960,80 1200,20 1440,50 L1440,100 L0,100 Z" fill="#f5e8c8"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ============ MARQUEE ============ -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      <span class="marquee__item">SALSE FATTE BENE</span><span class="marquee__sep">★</span>
+      <span class="marquee__item">PLAT 10€ · 7J/7 · 19H30-02H</span><span class="marquee__sep">●</span>
+      <span class="marquee__item">CUCINA ITALIANA</span><span class="marquee__sep">★</span>
+      <span class="marquee__item">MADE IN BORDEAUX</span><span class="marquee__sep">●</span>
+      <span class="marquee__item">CLICK & COLLECT</span><span class="marquee__sep">★</span>
+      <span class="marquee__item">SALSE FATTE BENE</span><span class="marquee__sep">★</span>
+      <span class="marquee__item">PLAT 10€ · 7J/7 · 19H30-02H</span><span class="marquee__sep">●</span>
+      <span class="marquee__item">CUCINA ITALIANA</span><span class="marquee__sep">★</span>
+      <span class="marquee__item">MADE IN BORDEAUX</span><span class="marquee__sep">●</span>
+      <span class="marquee__item">CLICK & COLLECT</span><span class="marquee__sep">★</span>
+    </div>
+  </div>
+
+  <!-- ============ STORY ============ -->
+  <section class="story">
+    <div class="container">
+      <div class="story__head">
+        <span class="eyebrow">Salse fatte bene</span>
+        <h2 class="section-title">6 sauces, 2 bases, ton plat italien en 5 minutes</h2>
+        <p class="section-lead">
+          Chez Bogusto, on cuisine à l'italienne, sans chichis. Tu choisis ta base — pâtes ou riz Jasmin — et l'une de nos six sauces signatures préparées maison. Plat 10€, boisson au choix, prêt à emporter en quelques minutes.
+        </p>
+      </div>
+
+      <div class="story__cards">
+        <article class="story-card">
+          <div class="story-card__icon">🌿</div>
+          <h3>Maison</h3>
+          <p>Sauces préparées chaque jour, ingrédients italiens, recettes du chef.</p>
+        </article>
+        <article class="story-card">
+          <div class="story-card__icon">⚡</div>
+          <h3>Rapide</h3>
+          <p>Tu choisis, tu commandes, on prépare. Click & Collect en quelques minutes.</p>
+        </article>
+        <article class="story-card">
+          <div class="story-card__icon">💸</div>
+          <h3>Tout compris</h3>
+          <p>10€ tes deux mains : un plat copieux + une boisson. Menu enfant à -5€.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ COMPOSE TA PASTA ============ -->
+  <section class="compose" id="compose">
+    <div class="container">
+      <div class="compose__inner">
+        <div class="compose__head">
+          <span class="eyebrow eyebrow--light">Compose ton plat</span>
+          <h2 class="section-title section-title--light">Ta base, ta sauce, ta boisson — 10€</h2>
+          <p class="section-lead section-lead--light">
+            Pâtes ou riz Jasmin. Six sauces signature préparées maison. Toppings offerts. Boisson à choisir à l'étape suivante.
+          </p>
+        </div>
+
+        <div class="compose__builder">
+          <div class="builder">
+            <details class="acc" open>
+              <summary class="acc__head">
+                <span class="acc__num">1</span>
+                <span class="acc__title">Ta base</span>
+                <span class="acc__preview" data-preview-for="composeSize">Choisir</span>
+                <span class="acc__chevron" aria-hidden="true">▾</span>
+              </summary>
+              <div class="acc__body">
+                <div class="chips" id="composeSize">
+                  <button class="chip" data-value="Pâtes" data-price="10">Pâtes</button>
+                  <button class="chip" data-value="Riz Jasmin" data-price="10">Riz — Jasmin</button>
+                </div>
+              </div>
+            </details>
+
+            <details class="acc">
+              <summary class="acc__head">
+                <span class="acc__num">2</span>
+                <span class="acc__title">Ta sauce</span>
+                <span class="acc__preview" data-preview-for="composeBase">Choisir</span>
+                <span class="acc__chevron" aria-hidden="true">▾</span>
+              </summary>
+              <div class="acc__body">
+                <div class="chips chips--wrap" id="composeBase">
+                  <button class="chip" data-value="Poulet Funghetto" data-extra="0">Poulet Funghetto</button>
+                  <button class="chip" data-value="Cremoso Pollo" data-extra="0">Cremoso Pollo</button>
+                  <button class="chip" data-value="Ladonna" data-extra="0">Ladonna</button>
+                  <button class="chip" data-value="Salmone Cremoso" data-extra="0">Salmone Cremoso</button>
+                  <button class="chip" data-value="Salsa Fuego" data-extra="0">Salsa Fuego 🌶️</button>
+                  <button class="chip" data-value="Sauce du moment" data-extra="0">Sauce du moment ✨</button>
+                </div>
+              </div>
+            </details>
+
+            <details class="acc">
+              <summary class="acc__head">
+                <span class="acc__num">3</span>
+                <span class="acc__title">Suppléments <small>· facultatif</small></span>
+                <span class="acc__preview" data-preview-for="composeTopping">—</span>
+                <span class="acc__chevron" aria-hidden="true">▾</span>
+              </summary>
+              <div class="acc__body">
+                <div class="chips chips--wrap" id="composeTopping">
+                  <button class="chip" data-value="Burrata 100g" data-extra="3">Burrata 100g (+3€)</button>
+                  <button class="chip" data-value="Noix à la truffe" data-extra="5">Noix à la truffe (+5€)</button>
+                  <button class="chip" data-value="Oignons frits" data-extra="0">Oignons frits (offert)</button>
+                  <button class="chip" data-value="Piment" data-extra="0">Piment (offert)</button>
+                </div>
+              </div>
+            </details>
+
+            <details class="acc">
+              <summary class="acc__head">
+                <span class="acc__num">4</span>
+                <span class="acc__title">Une précision ?</span>
+                <span class="acc__preview" id="composeNotePreview">Facultatif</span>
+                <span class="acc__chevron" aria-hidden="true">▾</span>
+              </summary>
+              <div class="acc__body">
+                <textarea id="composeNote" class="textarea" placeholder="Allergies, sans tel ingrédient, cuisson..."></textarea>
+              </div>
+            </details>
+
+            <div class="compose__live">
+              <div class="compose__live-info">
+                <span>Total estimatif</span>
+                <strong id="composeLivePrice">10,00€</strong>
+              </div>
+              <button class="btn btn--primary btn--full" id="composeAdd">Ajouter à ma commande</button>
+            </div>
+          </div>
+
+          <aside class="compose__visual" aria-hidden="true">
+            <div class="compose__sticker">
+              <span>MANGIA</span>
+              <strong>BENE</strong>
+            </div>
+            <div class="compose__devanture">
+              <img src="assets/bog-3.jpg" alt="Devanture Bogusto · enseigne, quartier Ginko Bordeaux" />
+              <span class="compose__devanture-caption">📍 Notre boutique · Ginko</span>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MENU ============ -->
+  <section class="menu" id="menu">
+    <div class="container">
+      <div class="menu__head">
+        <span class="eyebrow">Notre carte</span>
+        <h2 class="section-title">Le menu Bogusto</h2>
+        <p class="section-lead">Tous les plats à 10€ (boisson à part). Six sauces signature, base au choix, suppléments Burrata / Noix truffe, menu enfant.</p>
+      </div>
+
+      <div class="menu__filters" id="menuFilters">
+        <button class="filter active" data-filter="all">Tout</button>
+        <button class="filter" data-filter="plat">Nos plats — 10€</button>
+        <button class="filter" data-filter="enfant">Menu enfant</button>
+        <button class="filter" data-filter="dessert">Desserts</button>
+        <button class="filter" data-filter="boisson">Boissons</button>
+      </div>
+
+      <div class="menu__grid" id="menuGrid"></div>
+
+      <div class="menu__supplements">
+        <h4>Personnalise ton plat</h4>
+        <p>
+          <span><strong>Suppléments</strong> · Burrata 100g <strong>+3€</strong> · Noix à la truffe <strong>+5€</strong></span>
+          <span><strong>Toppings offerts 🎁</strong> · Oignons frits · Piment</span>
+          <span><strong>Menu enfant –12 ans</strong> · base + sauce + Caprisun ou eau <strong>5€</strong></span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DELIVERY / ADDRESS ============ -->
+  <section class="delivery" id="livraison">
+    <div class="container delivery__grid">
+      <div class="delivery__content">
+        <span class="eyebrow eyebrow--light">Où nous trouver</span>
+        <h2 class="section-title section-title--light">Bogusto — Quartier Ginko</h2>
+        <p class="section-lead section-lead--light">
+          Indique tes infos, choisis ton heure et viens récupérer ton plat à la boutique. Click & Collect rapide et sans prise de tête.
+        </p>
+
+        <ul class="delivery__list">
+          <li>
+            <img src="assets/google-maps.png" alt="" class="delivery__icon" />
+            7 Cours de Québec, 33300 Bordeaux
+          </li>
+          <li><span>🕒</span> 7 jours sur 7 · 19h30 – 02h00</li>
+          <li><span>🌙</span> Service du soir uniquement</li>
+          <li><span>💳</span> Espèces, CB, tickets resto, Apple Pay, Google Pay</li>
+        </ul>
+
+        <div class="delivery__social">
+          <a href="https://www.instagram.com/bogusto/" target="_blank" rel="noopener" class="social" aria-label="Instagram">
+            <img src="assets/instagram.svg" alt="Instagram" />
+          </a>
+          <a href="https://www.tiktok.com/@pastabogfrance" target="_blank" rel="noopener" class="social" aria-label="TikTok">
+            <img src="assets/tiktok.webp" alt="TikTok" />
+          </a>
+          <a href="https://snapchat.com/t/NRdHJFyD" target="_blank" rel="noopener" class="social" aria-label="Snapchat">
+            <img src="assets/snapchat.png" alt="Snapchat" />
+          </a>
+        </div>
+
+        <p class="delivery__legal">
+          La demande envoyée via le site ne vaut pas confirmation automatique. L'équipe Bogusto peut vous recontacter pour valider la commande, le délai et le total.
+        </p>
+      </div>
+
+      <div class="delivery__steps">
+        <h3>Comment ça marche ?</h3>
+        <ol class="steps">
+          <li><span class="step-num">1</span><div><strong>Choisis tes plats</strong><p>Clique sur "Ajouter" pour les ajouter à ta commande.</p></div></li>
+          <li><span class="step-num">2</span><div><strong>Remplis tes infos</strong><p>Nom, téléphone, créneau de retrait.</p></div></li>
+          <li><span class="step-num">3</span><div><strong>Choisis ton heure</strong><p>Sélectionne ton créneau idéal de récupération.</p></div></li>
+          <li><span class="step-num">4</span><div><strong>Récupère & savoure</strong><p>L'équipe Bogusto te confirme et prépare ton plat.</p></div></li>
+        </ol>
+
+        <a href="https://www.google.com/maps/search/?api=1&query=Bogusto+7+Cours+de+Qu%C3%A9bec+33300+Bordeaux" target="_blank" rel="noopener" class="btn btn--primary btn--full btn--maps">
+          <img src="assets/google-maps.png" alt="" class="btn__icon" />
+          Ouvrir dans Google Maps
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ORDER FORM ============ -->
+  <section class="order" id="commander">
+    <div class="container">
+      <div class="order__head">
+        <span class="eyebrow">Ta commande</span>
+        <h2 class="section-title">Passer commande</h2>
+        <p class="section-lead">Vérifie ton panier, remplis tes infos et envoie ta demande.</p>
+      </div>
+
+      <div class="order__grid">
+        <!-- CART -->
+        <aside class="cart">
+          <div class="cart__header">
+            <h3>🛒 Mon panier</h3>
+            <span class="cart-badge" id="cartBadgeForm">0</span>
+          </div>
+
+          <div class="cart__items" id="cartItems">
+            <div class="cart__empty">
+              <p>🍝 Ton panier est vide.</p>
+              <p>Ajoute des plats depuis le menu pour commencer ta commande.</p>
+              <a href="#menu" class="btn btn--ghost btn--small">Voir le menu</a>
+            </div>
+          </div>
+
+          <div class="cart__total">
+            <span>Total estimatif</span>
+            <strong id="cartTotal">0,00€</strong>
+          </div>
+          <p class="cart__hint">Le total final sera confirmé par l'équipe Bogusto.</p>
+        </aside>
+
+        <!-- FORM -->
+        <form class="orderform" id="orderForm" action="https://api.web3forms.com/submit" method="POST">
+          <input type="hidden" name="access_key" value="REMPLACER_PAR_LA_CLE_WEB3FORMS" />
+          <input type="hidden" name="subject" value="Nouvelle commande Bogusto" />
+          <input type="hidden" name="from_name" value="Site Bogusto" />
+          <input type="hidden" name="commande_resume" id="commandeResume" value="" />
+          <input type="hidden" name="total_estimatif" id="totalEstimatif" value="0,00€" />
+          <input type="checkbox" name="botcheck" class="hidden" style="display: none;" tabindex="-1" autocomplete="off" />
+
+          <div class="orderform__row">
+            <label>
+              <span>Nom complet *</span>
+              <input type="text" name="nom" required placeholder="Marie Dupont" />
+            </label>
+            <label>
+              <span>Téléphone *</span>
+              <input type="tel" name="telephone" required placeholder="06 12 34 56 78" />
+            </label>
+          </div>
+
+          <label>
+            <span>Mode de récupération *</span>
+            <select name="mode" required>
+              <option value="">Choisis...</option>
+              <option value="Manger sur place">🍽️ Manger sur place</option>
+              <option value="Click & Collect">📦 Click & Collect — à récupérer</option>
+              <option value="À emporter">🥡 À emporter</option>
+            </select>
+          </label>
+
+          <div class="orderform__row">
+            <label>
+              <span>Date / créneau *</span>
+              <input type="text" name="date" required placeholder="Aujourd'hui, demain..." />
+            </label>
+            <label>
+              <span>Heure souhaitée *</span>
+              <input type="time" name="heure" required />
+            </label>
+          </div>
+
+          <label>
+            <span>Mode de paiement *</span>
+            <select name="paiement" required>
+              <option value="">Choisis...</option>
+              <option value="Espèces">Espèces sur place</option>
+              <option value="CB">Carte bancaire</option>
+              <option value="Ticket resto">Ticket restaurant</option>
+              <option value="Apple/Google Pay">Apple / Google Pay</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Commentaire (facultatif)</span>
+            <textarea name="commentaire" rows="3" placeholder="Allergies, précisions..."></textarea>
+          </label>
+
+          <button type="submit" class="btn btn--primary btn--large btn--full" id="submitBtn">
+            Envoyer ma commande
+          </button>
+
+          <p class="orderform__legal">
+            En envoyant ce formulaire, tu acceptes d'être recontacté par Bogusto pour confirmer la commande.
+          </p>
+
+          <div class="orderform__success" id="orderSuccess" hidden>
+            <div class="success-icon">✓</div>
+            <h3>Commande envoyée !</h3>
+            <p>L'équipe Bogusto revient vers toi pour confirmer le créneau et le total. Merci pour ta confiance 🍝</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ INSTAGRAM ============ -->
+  <section class="insta">
+    <div class="container">
+      <div class="insta__head">
+        <span class="eyebrow">@bogusto</span>
+        <h2 class="section-title">On t'attend sur Instagram</h2>
+        <p class="section-lead">Découvre les plats du jour, les nouveautés et l'envers du décor. Tag-nous quand tu commandes !</p>
+      </div>
+
+      <div class="insta__grid">
+        <a href="https://www.instagram.com/bogusto/" target="_blank" rel="noopener" class="insta-card" aria-label="Devanture Bogusto sur Instagram">
+          <img src="assets/bog-3.jpg" alt="Devanture Bogusto · enseigne rouge" loading="lazy" />
+          <div class="insta-card__overlay"><span>📸</span></div>
+        </a>
+        <a href="https://www.instagram.com/bogusto/" target="_blank" rel="noopener" class="insta-card" aria-label="Cuisine Bogusto sur Instagram">
+          <img src="assets/bog-1.jpg" alt="Le chef Bogusto en cuisine" loading="lazy" />
+          <div class="insta-card__overlay"><span>📸</span></div>
+        </a>
+        <a href="https://www.instagram.com/bogusto/" target="_blank" rel="noopener" class="insta-card" aria-label="Plats Bogusto sur Instagram">
+          <img src="assets/bog-2.jpg" alt="Barquettes Bogusto · parmesan en train de tomber" loading="lazy" />
+          <div class="insta-card__overlay"><span>📸</span></div>
+        </a>
+        <a href="https://www.instagram.com/bogusto/" target="_blank" rel="noopener" class="insta-card" aria-label="Équipe Bogusto sur Instagram">
+          <img src="assets/devanture.jpg" alt="L'équipe Bogusto" loading="lazy" />
+          <div class="insta-card__overlay"><span>📸</span></div>
+        </a>
+      </div>
+
+      <div class="insta__cta">
+        <a href="https://www.instagram.com/bogusto/" target="_blank" rel="noopener" class="btn btn--primary">
+          <img src="assets/instagram.svg" alt="" class="btn__icon" />
+          Suivre @bogusto
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="container footer__grid">
+      <div class="footer__col">
+        <a href="#hero" class="logo logo--footer">
+          <img src="assets/bogusto.svg" alt="Bogusto — Salse fatte bene" class="logo__img" />
+        </a>
+        <p>Cuisine italienne au quartier Ginko, Bordeaux. Plat 10€, six sauces signature, 7j/7 de 19h30 à 02h00.</p>
+      </div>
+
+      <div class="footer__col">
+        <h4>Adresse</h4>
+        <ul>
+          <li>7 Cours de Québec</li>
+          <li>33300 Bordeaux</li>
+          <li>
+            <a href="https://www.google.com/maps/search/?api=1&query=Bogusto+7+Cours+de+Qu%C3%A9bec+33300+Bordeaux" target="_blank" rel="noopener" class="footer__link">
+              <img src="assets/google-maps.png" alt="" class="footer__icon" />
+              Voir sur la carte
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>Horaires</h4>
+        <ul>
+          <li>7 jours sur 7</li>
+          <li>19h30 – 02h00</li>
+          <li>Service du soir</li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>Réseaux</h4>
+        <ul>
+          <li><a href="https://www.instagram.com/bogusto/" target="_blank" rel="noopener">📸 @bogusto</a></li>
+          <li><a href="https://www.tiktok.com/@bogusto" target="_blank" rel="noopener">🎵 @bogusto</a></li>
+          <li><a href="https://snapchat.com/t/NRdHJFyD" target="_blank" rel="noopener">👻 Snapchat</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p>© <span id="year"></span> Bogusto — Tous droits réservés. Commande sous réserve de confirmation par l'établissement.</p>
+    </div>
+  </footer>
+
+  <!-- ============ STICKY MOBILE CTA ============ -->
+  <a href="#commander" class="sticky-cta" id="stickyCta">
+    <span class="sticky-cta__label">Commander maintenant</span>
+    <span class="sticky-cta__total" id="stickyTotal">0,00€</span>
+    <span class="cart-badge" id="cartBadgeSticky">0</span>
+  </a>
+
+  <!-- ============ TOAST ============ -->
+  <div class="toast" id="toast" hidden role="status">
+    <span class="toast__icon">✓</span>
+    <span class="toast__msg">Ajouté au panier</span>
+  </div>
+
+  <!-- ============ MODAL ============ -->
+  <div class="modal" id="modal" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__panel" role="dialog" aria-modal="true">
+      <button class="modal__close" data-close aria-label="Fermer">✕</button>
+      <div class="modal__content" id="modalContent"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
