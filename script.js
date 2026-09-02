@@ -3,52 +3,79 @@
    Cart + Menu + Form
    ============================================ */
 
-/* ---------- MENU DATA ---------- */
+/* ---------- CARTE BOGUSTO — "Plat à composer 10€" ----------
+   Toute la carte se modifie ici : bases, garnitures, suppléments,
+   desserts et boisson. Le reste du site s'adapte automatiquement. */
+
+const PLAT_PRICE    = 10;  // plat à composer : 1 base + 1 garniture
+const SALADE_PRICE  = 10;  // salade burrata
+const TIRAMISU_PRICE = 5;  // tiramisu (parfum au choix)
+const CANETTE_PRICE = 2;   // canette, à part
+
+/* 1 — LES BASES (une seule au choix) */
+const BASES = [
+  { val: "Crème de champignons", label: "Crème de champignons",         extra: 0 },
+  { val: "Base crème classique", label: "Base crème classique",         extra: 0 },
+  { val: "Base tomate",          label: "Base tomate",                  extra: 0 },
+  { val: "La Spéciale",          label: "La Spéciale · crème + tomate", extra: 0 },
+  { val: "Crème de truffe",      label: "Crème de truffe",              extra: 4 },
+  { val: "L'Italiana",           label: "L'Italiana",                   extra: 0 },
+];
+
+/* 2 — LES GARNITURES
+   first = supplément sur la garniture comprise dans le plat
+   extra = prix d'une garniture supplémentaire */
+const GARNITURES = [
+  { val: "Saumon fumé",         label: "Saumon fumé",         first: 1, extra: 3 },
+  { val: "Poulet",              label: "Poulet",              first: 0, extra: 2 },
+  { val: "Légumes",             label: "Légumes",             first: 0, extra: 2 },
+  { val: "Viande hachée",       label: "Viande hachée",       first: 0, extra: 2 },
+  { val: "Lardons de volaille", label: "Lardons de volaille", first: 0, extra: 2 },
+  { val: "Bœuf effiloché",      label: "Bœuf effiloché",      first: 1, extra: 3 },
+  { val: "Magret",              label: "Magret",              first: 3, extra: 3 },
+];
+
+/* 3 — LES SUPPLÉMENTS */
+const SUPPLEMENTS = [
+  { val: "Burrata 50g",  label: "Burrata 50g",  extra: 3 },
+  { val: "Burrata 100g", label: "Burrata 100g", extra: 5 },
+];
+
+/* 5 — LES PARFUMS DE TIRAMISU */
+const TIRAMISU_PARFUMS = ["M&M's", "Spéculos", "Oreo", "Classique cacao"];
+
+/* ---------- CARDS DE LA SECTION CARTE ---------- */
 const MENU = [
-  // --- PLATS — 10€ (boisson à part) ---
-  { id: "funghetto",   cat: "plat", tag: "Champignons",  tagStyle: "green",  name: "Poulet Funghetto",  desc: "Champignons poêlés, oignons, poulet sauté.", price: 10, customizable: true },
-  { id: "cremoso",     cat: "plat", tag: "Crémeux",      tagStyle: "yellow", name: "Cremoso Pollo",     desc: "Crème, poulet grillé. Simple, onctueux, efficace !", price: 10, customizable: true },
-  { id: "ladonna",     cat: "plat", tag: "Signature",    tagStyle: "hot",    name: "Ladonna",           desc: "Lardons fumés, crème onctueuse, ail, poivre noir. La version Bogusto, généreuse et gourmande.", price: 10, customizable: true, popular: true },
-  { id: "salmone",     cat: "plat", tag: "Raffiné",      tagStyle: "maison", name: "Salmone Cremoso",   desc: "Épices italiennes, crème, saumon émietté, tomates. Raffiné et puissant.", price: 10, customizable: true },
-  { id: "fuego",       cat: "plat", tag: "Épicé 🌶️",     tagStyle: "hot",    name: "Salsa Fuego",       desc: "Sauce tomate, paprika, saucisses grillées. Relevé et puissant.", price: 10, customizable: true },
-  { id: "moment",      cat: "plat", tag: "Nouveau ✨",   tagStyle: "hot",    name: "Sauce du moment",   desc: "La création éphémère du chef. À demander sur place ou découvrir à la livraison.", price: 10, customizable: true },
+  { id: "compose",  cat: "plat",    tag: "À composer", tagStyle: "hot",    name: "Plat à composer",
+    desc: "Ta base, ta garniture, tes suppléments. Six bases maison, sept garnitures — tu composes, on cuisine.",
+    price: PLAT_PRICE, customizable: true, popular: true },
 
-  // --- SALADE BURRATA 250g ---
-  { id: "burrata250",  cat: "plat", tag: "Frais",       tagStyle: "green",  name: "Burrata 250g + Salade", desc: "Burrata 250g, tomates cerises, salade, parmesan, vinaigrette maison.", price: 10 },
+  { id: "salade",   cat: "plat",    tag: "Fraîche",    tagStyle: "green",  name: "Salade Burrata",
+    desc: "Burrata crémeuse, roquette, tomates cerises, copeaux de parmesan, crème de balsamique. Fraîche, généreuse, italienne.",
+    price: SALADE_PRICE },
 
-  // --- MENU ENFANT –12 ans ---
-  { id: "enfant",      cat: "enfant",  tag: "–12 ans",   tagStyle: "yellow", name: "Menu Enfant",       desc: "Base + sauce + boisson enfant (Caprisun ou eau). Portion enfant, à prix doux.", price: 5 },
+  { id: "tiramisu", cat: "dessert", tag: "Maison",     tagStyle: "maison", name: "Tiramisu",
+    desc: "Préparé sur place, parfum au choix : M&M's, Spéculos, Oreo ou classique cacao.",
+    price: TIRAMISU_PRICE },
 
-  // --- DESSERTS ---
-  { id: "tiramisu",    cat: "dessert", tag: "Maison",    tagStyle: "maison", name: "Tiramisu maison",   desc: "Tiramisu préparé sur place, à l'italienne.", price: 5 },
-
-  // --- BOISSONS ---
-  { id: "canette",     cat: "boisson", tag: "Canette",   tagStyle: "yellow", name: "Canette",           desc: "Coca, Coca Zero, Fanta, Sprite ou Oasis. 33cl bien fraîche.", price: 2 },
-  { id: "eau",         cat: "boisson", tag: "Eau",       tagStyle: "yellow", name: "Eau",               desc: "Plate ou pétillante.", price: 1 },
-  { id: "bissap",      cat: "boisson", tag: "Maison 🌺",  tagStyle: "maison", name: "Bissap",            desc: "Infusion d'hibiscus, fraîcheur florale. Maison.", price: 4 },
-  { id: "gingembre",   cat: "boisson", tag: "Maison 🫚",  tagStyle: "maison", name: "Gingembre",         desc: "Infusion gingembre, tonique et désaltérante. Maison.", price: 4 },
+  { id: "canette",  cat: "boisson", tag: "33cl",       tagStyle: "yellow", name: "Canette",
+    desc: "Bien fraîche, servie à part.",
+    price: CANETTE_PRICE },
 ];
 
-/* ---------- DRINK POPUP ----------
-   Depuis avril 2026 : plat 10€ HORS boisson.
-   Ajout d'un plat → popup boisson obligatoire (Caprisun uniquement menu enfant). */
-const DRINK_OPTIONS = [
-  { val: "Canette",         label: "Canette",         price: 2 },
-  { val: "Eau plate",       label: "Eau plate",       price: 1 },
-  { val: "Eau pétillante",  label: "Eau pétillante",  price: 1 },
-  { val: "Bissap maison",   label: "Bissap 🌺",       price: 4 },
-  { val: "Gingembre maison",label: "Gingembre 🫚",    price: 4 },
-];
-const KID_DRINK_OPTIONS = [
-  { val: "Caprisun",        label: "Caprisun 🧃",     price: 1.5 },
-  { val: "Eau plate",       label: "Eau plate",       price: 1 },
-  { val: "Eau pétillante",  label: "Eau pétillante",  price: 1 },
-];
+/* ---------- RENDU DES CHIPS (base / garniture / suppléments) ---------- */
+const priceTag = (n) => (n > 0 ? ` <em>+${n}€</em>` : "");
+
+function chipList(items, priceKey) {
+  return items.map(i => {
+    const ex = i[priceKey] || 0;
+    return `<button class="chip" data-value="${i.val}" data-val="${i.val}" data-extra="${ex}">${i.label}${priceTag(ex)}</button>`;
+  }).join("");
+}
 
 /* ---------- CATEGORY ICONS (SVG) ---------- */
 const CAT_ICON = {
   plat:        '<svg viewBox="0 0 32 32" fill="currentColor"><ellipse cx="16" cy="20" rx="13" ry="6" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5 18 Q16 14 27 18" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M10 15 Q12 11 14 15 M16 14 Q18 10 20 14 M22 15 Q24 11 26 15" stroke="currentColor" stroke-width="1.3" fill="none"/></svg>',
-  enfant:      '<svg viewBox="0 0 32 32" fill="currentColor"><circle cx="16" cy="11" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M9 26 Q9 18 16 18 Q23 18 23 26" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="14" cy="11" r="1"/><circle cx="18" cy="11" r="1"/></svg>',
   dessert:     '<svg viewBox="0 0 32 32" fill="currentColor"><path d="M8 12 Q8 6 16 6 Q24 6 24 12 L24 14 L8 14 Z"/><rect x="10" y="14" width="12" height="10" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M11 18 L21 18 M11 21 L21 21" stroke="currentColor" stroke-width="1.5"/></svg>',
   boisson:     '<svg viewBox="0 0 32 32" fill="currentColor"><rect x="10" y="6" width="12" height="20" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="10" y="9" width="12" height="2"/><path d="M12 14 L20 14 M12 18 L20 18" stroke="currentColor" stroke-width="1.2"/></svg>',
 };
@@ -163,31 +190,19 @@ function onAddProduct(id) {
   const prod = MENU.find(m => m.id === id);
   if (!prod) return;
 
-  // Plat Bogusto personnalisable → builder modal (base + boisson + fromage + topping)
-  if (prod.customizable) {
-    openModal(bogustoModal(prod));
+  // Plat à composer → builder (base + garniture + garnitures en + + suppléments)
+  if (prod.id === "compose") {
+    openModal(composeModal(prod));
     return;
   }
 
-  // Menu enfant → base + sauce + boisson
-  if (prod.id === "enfant") {
-    openModal(enfantModal(prod));
+  // Tiramisu → choix du parfum
+  if (prod.id === "tiramisu") {
+    openModal(tiramisuModal(prod));
     return;
   }
 
-  // Canette → choix de la saveur
-  if (prod.id === "canette") {
-    openModal(canetteModal(prod));
-    return;
-  }
-
-  // Eau → plate ou pétillante
-  if (prod.id === "eau") {
-    openModal(waterModal(prod));
-    return;
-  }
-
-  // Simple add (tiramisu)
+  // Salade burrata, canette → ajout direct
   addToCart({
     productId: prod.id,
     name: prod.name,
@@ -195,6 +210,11 @@ function onAddProduct(id) {
     qty: 1,
     unitPrice: prod.price,
   });
+
+  // Canette proposée après un plat (elle est à part)
+  if (prod.cat === "plat") {
+    setTimeout(() => openModal(drinkPopupModal(prod.name)), 250);
+  }
 }
 
 /* ---------- MODALS ---------- */
@@ -209,273 +229,214 @@ function closeModal() {
   document.body.style.overflow = "";
 }
 
-function bogustoModal(prod) {
+function composeModal(prod) {
   return `
-    <h3>${prod.name}</h3>
+    <h3>${prod.name} — ${eur(PLAT_PRICE)}</h3>
     <p class="modal__desc">${prod.desc}</p>
 
     <div class="modal__field">
       <h5>1. Ta base</h5>
-      <div class="chips" id="mBase">
-        <button class="chip" data-val="Pâtes">Pâtes</button>
-        <button class="chip" data-val="Riz Jasmin">Riz</button>
-      </div>
+      <div class="chips chips--wrap" id="mBase">${chipList(BASES, "extra")}</div>
     </div>
 
     <div class="modal__field">
-      <h5>2. Suppléments <small style="font-weight:400;color:var(--c-grey);">facultatif</small></h5>
-      <div class="chips chips--wrap" id="mTopping">
-        <button class="chip" data-val="Burrata 100g" data-extra="3">Burrata 100g (+3€)</button>
-        <button class="chip" data-val="Noix à la truffe" data-extra="5">Noix à la truffe (+5€)</button>
-        <button class="chip" data-val="Oignons frits" data-extra="0">Oignons frits (offert)</button>
-        <button class="chip" data-val="Piment" data-extra="0">Piment (offert)</button>
-      </div>
+      <h5>2. Ta garniture <small style="font-weight:400;color:var(--c-grey);">comprise</small></h5>
+      <div class="chips chips--wrap" id="mGarniture">${chipList(GARNITURES, "first")}</div>
     </div>
 
     <div class="modal__field">
-      <h5>3. Une précision ?</h5>
+      <h5>3. Garniture en + <small style="font-weight:400;color:var(--c-grey);">facultatif</small></h5>
+      <div class="chips chips--wrap" id="mGarnitureExtra">${chipList(GARNITURES, "extra")}</div>
+    </div>
+
+    <div class="modal__field">
+      <h5>4. Suppléments <small style="font-weight:400;color:var(--c-grey);">facultatif</small></h5>
+      <div class="chips chips--wrap" id="mSupp">${chipList(SUPPLEMENTS, "extra")}</div>
+    </div>
+
+    <div class="modal__field">
+      <h5>5. Une précision ?</h5>
       <textarea class="textarea" id="mNote" placeholder="Allergies, sans tel ingrédient..."></textarea>
     </div>
 
-    <button class="btn btn--primary btn--full" id="confirmBogusto" data-base="${prod.price}" data-name="${prod.name}">Ajouter — ${eur(prod.price)}</button>
-    <p style="font-size:0.78rem;color:var(--c-grey);font-style:italic;margin-top:10px;text-align:center;">À l'étape suivante, choisis ta boisson 🍷</p>
+    <button class="btn btn--primary btn--full" id="confirmCompose">Ajouter — ${eur(PLAT_PRICE)}</button>
+    <p style="font-size:0.78rem;color:var(--c-grey);font-style:italic;margin-top:10px;text-align:center;">La canette est à part : ${eur(CANETTE_PRICE)} 🥤</p>
   `;
 }
 
-function enfantModal(prod) {
-  const sauces = MENU.filter(m => m.cat === "plat" && m.customizable).map(p => `<button class="chip" data-val="${p.name}">${p.name}</button>`).join("");
+function tiramisuModal(prod) {
   return `
-    <h3>${prod.name}</h3>
+    <h3>${prod.name} — ${eur(prod.price)}</h3>
     <p class="modal__desc">${prod.desc}</p>
 
     <div class="modal__field">
-      <h5>1. Ta base</h5>
-      <div class="chips" id="mBase">
-        <button class="chip" data-val="Pâtes">Pâtes</button>
-        <button class="chip" data-val="Riz Jasmin">Riz</button>
+      <h5>Choisis ton parfum</h5>
+      <div class="chips chips--wrap" id="mTiramisu">
+        ${TIRAMISU_PARFUMS.map(p => `<button class="chip" data-val="${p}">${p}</button>`).join("")}
       </div>
     </div>
 
-    <div class="modal__field">
-      <h5>2. Ta sauce</h5>
-      <div class="chips chips--wrap" id="mSauceEnfant">${sauces}</div>
-    </div>
-
-    <div class="modal__field">
-      <h5>3. Ta boisson <small style="font-weight:400;color:var(--c-grey);">spécial enfant</small></h5>
-      <div class="chips chips--wrap" id="mDrink">
-        ${KID_DRINK_OPTIONS.map(d => `<button class="chip" data-val="${d.val}">${d.label}</button>`).join("")}
-      </div>
-    </div>
-
-    <button class="btn btn--primary btn--full" id="confirmEnfant" data-base="${prod.price}">Ajouter — ${eur(prod.price)}</button>
+    <button class="btn btn--primary btn--full" id="confirmTiramisu" data-base="${prod.price}">Ajouter — ${eur(prod.price)}</button>
   `;
 }
 
-/* ---------- DRINK POPUP (obligatoire après ajout plat) ---------- */
+/* ---------- POPUP CANETTE (proposée après un plat) ---------- */
 function drinkPopupModal(forProduct) {
   return `
-    <h3>Et avec ça, une boisson ?</h3>
-    <p class="modal__desc">Ton plat <strong>${forProduct}</strong> est presque dans le panier. Choisis ta boisson pour finaliser.</p>
+    <h3>Et avec ça, une canette ?</h3>
+    <p class="modal__desc">Ton plat <strong>${forProduct}</strong> est dans le panier. La canette est servie à part : ${eur(CANETTE_PRICE)}.</p>
 
-    <div class="modal__field">
-      <h5>Choisis ta boisson</h5>
-      <div class="chips chips--wrap" id="mDrinkPopup">
-        ${DRINK_OPTIONS.map(d => `<button class="chip" data-val="${d.val}" data-price="${d.price}">${d.label} · ${eur(d.price)}</button>`).join("")}
-      </div>
-    </div>
-
-    <button class="btn btn--primary btn--full" id="confirmDrinkPopup">Ajouter la boisson au panier</button>
+    <button class="btn btn--primary btn--full" id="confirmDrinkPopup">Ajouter une canette — ${eur(CANETTE_PRICE)}</button>
     <button class="btn btn--ghost btn--full" id="skipDrinkPopup" style="margin-top:10px;">Continuer sans boisson</button>
   `;
 }
 
-function canetteModal(prod) {
-  return `
-    <h3>${prod.name}</h3>
-    <p class="modal__desc">${prod.desc}</p>
-    <div class="modal__field">
-      <h5>Choisis ta saveur</h5>
-      <div class="chips chips--wrap" id="mCan">
-        <button class="chip" data-val="Coca-Cola">Coca-Cola</button>
-        <button class="chip" data-val="Coca Zero">Coca Zero</button>
-        <button class="chip" data-val="Fanta Orange">Fanta</button>
-        <button class="chip" data-val="Sprite">Sprite</button>
-        <button class="chip" data-val="Oasis Tropical">Oasis</button>
-      </div>
-    </div>
-    <button class="btn btn--primary btn--full" id="confirmCanette" data-base="${prod.price}">Ajouter — ${eur(prod.price)}</button>
-  `;
-}
+/* ---------- PRIX DU PLAT DANS LA MODALE ---------- */
+const chipExtra = (el) => parseFloat(el.dataset.extra || 0);
+const chipLabel = (el) => {
+  const ex = chipExtra(el);
+  return ex > 0 ? `${el.dataset.val} (+${ex}€)` : el.dataset.val;
+};
 
-function waterModal(prod) {
-  return `
-    <h3>${prod.name}</h3>
-    <p class="modal__desc">${prod.desc}</p>
-    <div class="modal__field">
-      <h5>Plate ou pétillante ?</h5>
-      <div class="chips" id="mWater">
-        <button class="chip" data-val="Plate">Plate</button>
-        <button class="chip" data-val="Pétillante">Pétillante</button>
-      </div>
-    </div>
-    <button class="btn btn--primary btn--full" id="confirmWater" data-base="${prod.price}">Ajouter — ${eur(prod.price)}</button>
-  `;
+function modalPlatPrice() {
+  let total = PLAT_PRICE;
+  $$("#mBase .chip.is-active, #mGarniture .chip.is-active, #mGarnitureExtra .chip.is-active, #mSupp .chip.is-active")
+    .forEach(c => { total += chipExtra(c); });
+  return total;
+}
+function refreshModalPrice() {
+  const btn = $("#confirmCompose");
+  if (btn) btn.textContent = `Ajouter — ${eur(modalPlatPrice())}`;
 }
 
 /* ---------- MODAL BEHAVIOR ---------- */
 document.addEventListener("click", (e) => {
   if (e.target.closest("[data-close]")) closeModal();
 
-  // Single-select chips (Bogusto)
-  ["#mBase", "#mDrink", "#mWater", "#mCan", "#mSauceEnfant", "#mDrinkPopup"].forEach(id => {
+  // Choix unique
+  ["#mBase", "#mGarniture", "#mTiramisu"].forEach(id => {
     if (e.target.matches(`${id} .chip`)) {
       $$(`${id} .chip`).forEach(c => c.classList.remove("is-active"));
       e.target.classList.add("is-active");
     }
   });
 
-  // Multi-select pour suppléments/toppings
-  if (e.target.matches("#mTopping .chip")) {
+  // Choix multiples : garnitures en + et suppléments
+  if (e.target.matches("#mGarnitureExtra .chip") || e.target.matches("#mSupp .chip")) {
     e.target.classList.toggle("is-active");
   }
 
-  // CONFIRM BOGUSTO (plat customizable : base + suppléments + note → popup boisson)
-  if (e.target.id === "confirmBogusto") {
-    const basePrice = parseFloat(e.target.dataset.base);
-    const name = e.target.dataset.name || $("#modalContent h3").textContent;
-    const base = $("#mBase .chip.is-active")?.dataset.val;
-    const toppingEls = $$("#mTopping .chip.is-active");
-    const note = $("#mNote")?.value.trim();
+  if (e.target.matches(".modal .chip")) refreshModalPrice();
 
-    if (!base) { alert("Choisis ta base (Pâtes ou Riz)."); return; }
+  // CONFIRM PLAT À COMPOSER
+  if (e.target.id === "confirmCompose") {
+    const base = $("#mBase .chip.is-active");
+    const garniture = $("#mGarniture .chip.is-active");
+    if (!base) { alert("Choisis ta base."); return; }
+    if (!garniture) { alert("Choisis ta garniture."); return; }
 
-    let extra = 0;
-    let toppingsPaid = [];
-    let toppingsFree = [];
-    toppingEls.forEach(el => {
-      const v = el.dataset.val;
-      const ex = parseFloat(el.dataset.extra || 0);
-      extra += ex;
-      if (ex > 0) toppingsPaid.push(`${v} (+${ex}€)`);
-      else toppingsFree.push(v);
-    });
+    const extras = $$("#mGarnitureExtra .chip.is-active");
+    const supps  = $$("#mSupp .chip.is-active");
+    const note   = $("#mNote")?.value.trim();
 
-    let metaParts = [base];
-    if (toppingsPaid.length) metaParts.push(`Sup. : ${toppingsPaid.join(", ")}`);
-    if (toppingsFree.length) metaParts.push(`Toppings : ${toppingsFree.join(", ")}`);
+    const metaParts = [chipLabel(base), chipLabel(garniture)];
+    if (extras.length) metaParts.push(`En + : ${extras.map(chipLabel).join(", ")}`);
+    if (supps.length)  metaParts.push(`Sup. : ${supps.map(chipLabel).join(", ")}`);
     if (note) metaParts.push(note);
 
+    const platName = `Plat Bogusto — ${base.dataset.val}`;
+
     addToCart({
-      productId: name,
-      name: name,
+      productId: "compose",
+      name: platName,
       meta: metaParts.join(" · "),
       qty: 1,
-      unitPrice: basePrice + extra,
+      unitPrice: modalPlatPrice(),
     });
     closeModal();
-    // Popup boisson obligatoire ensuite
-    setTimeout(() => openModal(drinkPopupModal(name)), 250);
+    setTimeout(() => openModal(drinkPopupModal(platName)), 250);
   }
 
-  // CONFIRM ENFANT (boisson incluse Caprisun/eau, pas de popup)
-  if (e.target.id === "confirmEnfant") {
-    const base = $("#mBase .chip.is-active")?.dataset.val;
-    const sauce = $("#mSauceEnfant .chip.is-active")?.dataset.val;
-    const drink = $("#mDrink .chip.is-active")?.dataset.val;
-    if (!base) { alert("Choisis la base."); return; }
-    if (!sauce) { alert("Choisis la sauce."); return; }
-    if (!drink) { alert("Choisis la boisson."); return; }
+  // CONFIRM TIRAMISU
+  if (e.target.id === "confirmTiramisu") {
+    const sel = $("#mTiramisu .chip.is-active");
+    if (!sel) { alert("Choisis ton parfum."); return; }
     addToCart({
-      productId: "enfant",
-      name: "Menu Enfant",
-      meta: `${base} · ${sauce} · Boisson : ${drink}`,
-      qty: 1,
-      unitPrice: parseFloat(e.target.dataset.base),
-    });
-    closeModal();
-  }
-
-  // CONFIRM DRINK POPUP (après ajout plat adulte)
-  if (e.target.id === "confirmDrinkPopup") {
-    const sel = $("#mDrinkPopup .chip.is-active");
-    if (!sel) { alert("Choisis une boisson, ou clique sur 'Continuer sans boisson'."); return; }
-    addToCart({
-      productId: "drink-" + sel.dataset.val,
-      name: sel.dataset.val,
-      meta: "Avec un plat",
-      qty: 1,
-      unitPrice: parseFloat(sel.dataset.price),
-    });
-    closeModal();
-  }
-  if (e.target.id === "skipDrinkPopup") {
-    closeModal();
-  }
-
-  // CONFIRM CANETTE
-  if (e.target.id === "confirmCanette") {
-    const sel = $("#mCan .chip.is-active");
-    if (!sel) { alert("Choisis ta saveur."); return; }
-    addToCart({
-      productId: "canette",
-      name: `Canette ${sel.dataset.val}`,
-      meta: "",
-      qty: 1,
-      unitPrice: parseFloat(e.target.dataset.base),
-    });
-    closeModal();
-  }
-
-  // CONFIRM WATER
-  if (e.target.id === "confirmWater") {
-    const sel = $("#mWater .chip.is-active");
-    if (!sel) { alert("Choisis plate ou pétillante."); return; }
-    addToCart({
-      productId: "eau",
-      name: "Eau",
+      productId: "tiramisu",
+      name: "Tiramisu",
       meta: sel.dataset.val,
       qty: 1,
       unitPrice: parseFloat(e.target.dataset.base),
     });
     closeModal();
   }
+
+  // CONFIRM CANETTE (popup après un plat)
+  if (e.target.id === "confirmDrinkPopup") {
+    addToCart({
+      productId: "canette",
+      name: "Canette",
+      meta: "Avec un plat",
+      qty: 1,
+      unitPrice: CANETTE_PRICE,
+    });
+    closeModal();
+  }
+  if (e.target.id === "skipDrinkPopup") {
+    closeModal();
+  }
 });
 
-/* ---------- COMPOSE TON PLAT (Bogusto) ---------- */
+/* ---------- COMPOSE TON PLAT (section builder) ---------- */
 function initCompose() {
-  let selectedBase = null;       // Pâtes ou Riz
-  let selectedSauce = null;      // 6 sauces (Funghetto, Cremoso, Ladonna, Salmone, Fuego, Sauce du moment)
-  const selectedTopping = new Map(); // val → extra€
+  const elBase   = $("#composeBase");
+  const elGarn   = $("#composeGarniture");
+  const elExtras = $("#composeGarnitureExtra");
+  const elSupp   = $("#composeSupp");
+  if (!elBase || !elGarn || !elExtras || !elSupp) return;
 
-  function getSuppExtra() {
-    let total = 0;
-    selectedTopping.forEach(v => { total += v; });
-    return total;
+  elBase.innerHTML   = chipList(BASES, "extra");
+  elGarn.innerHTML   = chipList(GARNITURES, "first");
+  elExtras.innerHTML = chipList(GARNITURES, "extra");
+  elSupp.innerHTML   = chipList(SUPPLEMENTS, "extra");
+
+  let selectedBase = null;       // { val, extra }
+  let selectedGarniture = null;  // { val, extra }
+  const selectedExtras = new Map();  // val → prix
+  const selectedSupp   = new Map();  // val → prix
+
+  const sumMap = (m) => Array.from(m.values()).reduce((s, v) => s + v, 0);
+  const labelMap = (m) => Array.from(m.entries()).map(([v, p]) => (p > 0 ? `${v} (+${p}€)` : v));
+  const labelOne = (sel) => (sel && sel.extra > 0 ? `${sel.val} (+${sel.extra}€)` : (sel ? sel.val : ""));
+
+  function currentPrice() {
+    return PLAT_PRICE
+      + (selectedBase ? selectedBase.extra : 0)
+      + (selectedGarniture ? selectedGarniture.extra : 0)
+      + sumMap(selectedExtras)
+      + sumMap(selectedSupp);
   }
 
   function updateLivePrice() {
     const el = $("#composeLivePrice");
-    if (el) el.textContent = eur(10 + getSuppExtra());
+    if (el) el.textContent = eur(currentPrice());
   }
 
   function updatePreview(containerId, text) {
-    const p = document.querySelector(`[data-preview-for="${containerId.replace('#','')}"]`);
-    if (p) {
-      p.textContent = text;
-      p.classList.add("acc__preview--filled");
-    }
+    const p = document.querySelector(`[data-preview-for="${containerId.replace('#', '')}"]`);
+    if (!p) return;
+    const placeholder = p.dataset.placeholder || "Choisir";
+    p.textContent = text || placeholder;
+    p.classList.toggle("acc__preview--filled", !!text);
   }
 
-  // Auto-open next accordion step
+  // Ouvre automatiquement l'étape suivante
   function openNextStep(currentDetails) {
     const all = $$(".acc");
     const idx = all.indexOf(currentDetails);
     if (idx === -1 || idx === all.length - 1) return;
-    // close current, open next (only if next is still on placeholder)
     setTimeout(() => {
       currentDetails.removeAttribute("open");
-      // open next only if it's not yet filled
       const next = all[idx + 1];
       const nextPreview = next.querySelector(".acc__preview");
       if (next && (!nextPreview || !nextPreview.classList.contains("acc__preview--filled"))) {
@@ -489,69 +450,72 @@ function initCompose() {
     return el ? el.closest("details.acc") : null;
   }
 
-  // Helper to single-select
-  function pickSingle(containerId, onPick, autoNext = true) {
+  // Choix unique
+  function pickSingle(containerId, onPick) {
     $$(`${containerId} .chip`).forEach(c => {
       c.addEventListener("click", () => {
         $$(`${containerId} .chip`).forEach(x => x.classList.remove("is-active"));
         c.classList.add("is-active");
-        onPick(c);
-        updatePreview(containerId, c.dataset.value);
+        const sel = { val: c.dataset.value, extra: chipExtra(c) };
+        onPick(sel);
+        updatePreview(containerId, labelOne(sel));
         updateLivePrice();
-        if (autoNext) openNextStep(getDetails(containerId));
+        openNextStep(getDetails(containerId));
       });
     });
   }
 
-  pickSingle("#composeSize",  (c) => { selectedBase = c.dataset.value; });
-  pickSingle("#composeBase",  (c) => { selectedSauce = c.dataset.value; });
-
-  // Suppléments multi-select avec prix variables
-  $$("#composeTopping .chip").forEach(c => {
-    c.addEventListener("click", () => {
-      const val = c.dataset.value;
-      const extra = parseFloat(c.dataset.extra || 0);
-      if (selectedTopping.has(val)) {
-        selectedTopping.delete(val);
-        c.classList.remove("is-active");
-      } else {
-        selectedTopping.set(val, extra);
-        c.classList.add("is-active");
-      }
-      const labels = Array.from(selectedTopping.entries()).map(([v, p]) => p > 0 ? `${v} (+${p}€)` : v);
-      updatePreview("#composeTopping", labels.length ? labels.join(", ") : "—");
-      updateLivePrice();
+  // Choix multiples
+  function pickMulti(containerId, store) {
+    $$(`${containerId} .chip`).forEach(c => {
+      c.addEventListener("click", () => {
+        const val = c.dataset.value;
+        if (store.has(val)) {
+          store.delete(val);
+          c.classList.remove("is-active");
+        } else {
+          store.set(val, chipExtra(c));
+          c.classList.add("is-active");
+        }
+        updatePreview(containerId, labelMap(store).join(", "));
+        updateLivePrice();
+      });
     });
-  });
+  }
 
-  // Note preview
+  pickSingle("#composeBase", (sel) => { selectedBase = sel; });
+  pickSingle("#composeGarniture", (sel) => { selectedGarniture = sel; });
+  pickMulti("#composeGarnitureExtra", selectedExtras);
+  pickMulti("#composeSupp", selectedSupp);
+
+  // Aperçu de la note
   const noteEl = $("#composeNote");
   if (noteEl) {
     noteEl.addEventListener("input", () => {
       const v = noteEl.value.trim();
       const p = $("#composeNotePreview");
       if (p) {
-        p.textContent = v ? (v.length > 25 ? v.slice(0, 25) + "…" : v) : "Facultatif";
+        p.textContent = v ? (v.length > 25 ? v.slice(0, 25) + "…" : v) : (p.dataset.placeholder || "Facultatif");
         p.classList.toggle("acc__preview--filled", !!v);
       }
     });
   }
 
   $("#composeAdd").addEventListener("click", () => {
-    if (!selectedBase) { alert("Choisis ta base (Pâtes ou Riz)."); return; }
-    if (!selectedSauce) { alert("Choisis ta sauce."); return; }
+    if (!selectedBase) { alert("Choisis ta base."); return; }
+    if (!selectedGarniture) { alert("Choisis ta garniture."); return; }
 
-    const price = 10 + getSuppExtra();
-    const platName = `Plat Bogusto — ${selectedSauce}`;
+    const price = currentPrice();
+    const platName = `Plat Bogusto — ${selectedBase.val}`;
 
-    let parts = [selectedBase, selectedSauce];
-    const labels = Array.from(selectedTopping.entries()).map(([v, p]) => p > 0 ? `${v} (+${p}€)` : v);
-    if (labels.length) parts.push(`Sup. : ${labels.join(", ")}`);
-    const note = $("#composeNote").value.trim();
+    const parts = [labelOne(selectedBase), labelOne(selectedGarniture)];
+    if (selectedExtras.size) parts.push(`En + : ${labelMap(selectedExtras).join(", ")}`);
+    if (selectedSupp.size)   parts.push(`Sup. : ${labelMap(selectedSupp).join(", ")}`);
+    const note = noteEl ? noteEl.value.trim() : "";
     if (note) parts.push(note);
 
     addToCart({
-      productId: "compose-bogusto",
+      productId: "compose",
       name: platName,
       meta: parts.join(" · "),
       qty: 1,
@@ -559,25 +523,28 @@ function initCompose() {
     });
 
     // Reset
-    $$("#composeSize .chip, #composeBase .chip, #composeTopping .chip").forEach(c => c.classList.remove("is-active"));
-    selectedBase = null; selectedSauce = null;
-    selectedTopping.clear();
-    $("#composeNote").value = "";
+    $$(".builder .chip").forEach(c => c.classList.remove("is-active"));
+    selectedBase = null;
+    selectedGarniture = null;
+    selectedExtras.clear();
+    selectedSupp.clear();
+    if (noteEl) noteEl.value = "";
     updateLivePrice();
 
-    // Reset previews + close all accordions, reopen first
-    $$(".acc__preview").forEach((p, i) => {
+    $$(".acc__preview").forEach(p => {
       p.classList.remove("acc__preview--filled");
-      p.textContent = (i < 2) ? "Choisir" : (i === 2 ? "—" : "Facultatif");
+      p.textContent = p.dataset.placeholder || "Choisir";
     });
     $$(".acc").forEach((d, i) => {
       if (i === 0) d.setAttribute("open", "");
       else d.removeAttribute("open");
     });
 
-    // Popup boisson obligatoire (séparée du plat)
+    // Canette proposée juste après (elle est à part)
     setTimeout(() => openModal(drinkPopupModal(platName)), 250);
   });
+
+  updateLivePrice();
 }
 
 /* ---------- FEATURED COUP DE CŒUR ---------- */

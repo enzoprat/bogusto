@@ -2262,3 +2262,34 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .insta-card:hover img {
   transform: scale(1.06);
 }
+
+/* ============================================
+   V8 — Carte "Plat à composer" (flyer)
+   ============================================ */
+
+/* Prix affiché dans les chips (ex : Crème de truffe +4€) */
+.chip em {
+  font-style: normal;
+  font-weight: 700;
+  color: var(--c-orange);
+  margin-left: 4px;
+}
+.chip.is-active em { color: var(--c-cream); }
+
+/* Petite note d'explication sous une liste de chips */
+.acc__hint {
+  margin-top: 10px;
+  font-size: 0.78rem;
+  color: var(--c-grey);
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* Rappel canette sous le bouton d'ajout */
+.compose__live-note {
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--c-grey);
+  letter-spacing: 0.3px;
+}

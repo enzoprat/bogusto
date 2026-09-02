@@ -66,7 +66,7 @@
 Header fixed (shrink au scroll > 30px)
 ├─ Hero (logo central + 2 badges + titre massif + 2 CTA + 3 stats count-up + 2 bulles + 2 stamps tournants + wave SVG)
 ├─ Marquee défilante (orange, texte food-truck répété en boucle infinie 38s)
-├─ Story (eyebrow + titre + 3 mini-cards icônes : Maison / Rapide / Tout compris)
+├─ Story (eyebrow + titre + 3 mini-cards icônes : Maison / Rapide / 10€ le plat)
 ├─ Compose ton plat (section rouge brique — builder accordéon + photo devanture polaroid)
 ├─ Menu filtrable (filtres horizontaux + cards avec picto SVG cartouche + tag varié + bouton Ajouter)
 ├─ Section livraison (rouge brique : adresse + horaires + paiements + réseaux + bouton Maps + encart blanc "Comment ça marche")
@@ -82,20 +82,19 @@ Header fixed (shrink au scroll > 30px)
 
 ## 5. Tunnel d'achat (CRITIQUE)
 
-**Plat à 10€ HORS boisson** — la boisson n'est PAS incluse.
+**Plat à composer 10€ HORS boisson** — la canette est servie à part (2€).
 
 ```
 Clic sur "+ Ajouter" sur un plat
-  → Modale plat (Base + Suppléments + Précision)
+  → Modale plat (Base + Garniture + Garniture en + + Suppléments + Précision)
+  → Prix du bouton recalculé en live à chaque clic
   → Confirmation → plat ajouté au panier
-  → POPUP BOISSON OBLIGATOIRE qui s'ouvre 250ms après
-    → choix boisson (avec prix) ou "Continuer sans boisson"
-    → boisson ajoutée au panier en LIGNE SÉPARÉE
+  → POPUP CANETTE qui s'ouvre 250ms après
+    → "Ajouter une canette — 2,00€" ou "Continuer sans boisson"
+    → canette ajoutée au panier en LIGNE SÉPARÉE
 ```
 
-**Menu enfant** : boisson incluse (Caprisun ou eau), pas de popup.
-
-**Panier** : chaque ligne est un produit indépendant. Plat 10€ + Boisson 2€ = 2 lignes (≠ 1 ligne 12€).
+**Panier** : chaque ligne est un produit indépendant. Plat 10€ + Canette 2€ = 2 lignes (≠ 1 ligne 12€).
 
 ---
 
@@ -145,14 +144,12 @@ HTML natif `<details>` avec `<summary>` custom :
   <summary class="acc__head">
     <span class="acc__num">1</span>
     <span class="acc__title">Ta base</span>
-    <span class="acc__preview" data-preview-for="composeSize">Choisir</span>
+    <span class="acc__preview" data-preview-for="composeBase" data-placeholder="Choisir">Choisir</span>
     <span class="acc__chevron">▾</span>
   </summary>
   <div class="acc__body">
-    <div class="chips" id="composeSize">
-      <button class="chip" data-value="Pâtes">Pâtes</button>
-      …
-    </div>
+    <div class="chips chips--wrap" id="composeBase"></div>
+    <!-- les chips sont générées par chipList() depuis BASES / GARNITURES / SUPPLEMENTS -->
   </div>
 </details>
 ```
@@ -191,11 +188,11 @@ Sticker "MANGIA BENE" jaune doré qui dépasse en haut à gauche.
     <div class="product__picto">[svg picto catégorie]</div>
     <span class="product__tag product__tag--hot">Signature</span>
   </div>
-  <h3 class="product__name">Ladonna</h3>
+  <h3 class="product__name">Plat à composer</h3>
   <p class="product__desc">…</p>
   <div class="product__footer">
     <div class="product__price">10,00€<small>personnalisable</small></div>
-    <button class="product__add" data-id="ladonna">Ajouter</button>
+    <button class="product__add" data-id="compose">Ajouter</button>
   </div>
 </article>
 ```
@@ -230,11 +227,11 @@ Sticker "MANGIA BENE" jaune doré qui dépasse en haut à gauche.
 ### 6.9 Toast feedback
 Apparaît 2.2s après chaque ajout : `"✓ [Nom du plat] ajouté !"`. Position fixed bottom au-dessus du sticky CTA.
 
-### 6.10 Popup boisson (modale dédiée)
-Déclenchée automatiquement 250ms après `confirmBogusto` ou `composeAdd` :
-- Titre rouge brique "Et avec ça, une boisson ?"
-- Chips boisson avec prix : Canette · 2,00€ / Eau plate · 1,00€ / Eau pétillante · 1,00€ / Bissap 🌺 · 4,00€ / Gingembre 🫚 · 4,00€
-- 2 boutons : "Ajouter la boisson au panier" (primary) + "Continuer sans boisson" (ghost)
+### 6.10 Popup canette (modale dédiée)
+Déclenchée automatiquement 250ms après `confirmCompose`, `composeAdd` ou l'ajout d'un plat de la carte :
+- Titre rouge brique "Et avec ça, une canette ?"
+- Rappel que la canette est servie à part : 2,00€
+- 2 boutons : "Ajouter une canette — 2,00€" (primary) + "Continuer sans boisson" (ghost)
 
 ---
 
@@ -274,11 +271,11 @@ function loadCart() { try { CART = JSON.parse(localStorage.getItem(CART_KEY)) ||
 // Chaque item :
 {
   lineId:    uid(),                    // identifiant unique pour les actions
-  productId: "ladonna",
-  name:      "Ladonna",
-  meta:      "Pâtes · Sup. : Burrata 100g (+3€)",
+  productId: "compose",
+  name:      "Plat Bogusto — Crème de truffe",
+  meta:      "Crème de truffe (+4€) · Magret (+3€) · Sup. : Burrata 100g (+5€)",
   qty:       1,
-  unitPrice: 13
+  unitPrice: 22
 }
 
 // Actions
@@ -350,7 +347,7 @@ Au succès → cacher form, afficher encart vert ✓, vider panier.
 - 3 fichiers principaux : `index.html` + `style.css` + `script.js` + dossier `/assets/`
 - Pas de build step. Drag & drop sur Vercel ou Netlify suffit
 - Toutes les couleurs en variables CSS dans `:root`
-- Tout le menu dans un tableau `MENU` au début de `script.js` pour modification facile
+- Toute la carte en haut de `script.js` : `BASES`, `GARNITURES`, `SUPPLEMENTS`, `TIRAMISU_PARFUMS`, `MENU` — une seule source de vérité (les chips du builder et des modales en sont générées)
 - Clé Web3Forms remplaçable en 1 endroit
 - Pas de Google Analytics par défaut
 - HTML sémantique (header / main / section / nav / footer)
@@ -405,7 +402,7 @@ Au succès → cacher form, afficher encart vert ✓, vider panier.
 ## 16. Checklist de livraison
 
 - [ ] Toutes les couleurs en variables CSS
-- [ ] Menu modifiable en éditant uniquement le tableau `MENU`
+- [ ] Menu modifiable en éditant uniquement les tableaux du haut de `script.js`
 - [ ] Clé Web3Forms remplaçable en 1 endroit
 - [ ] Favicon présent
 - [ ] Open Graph meta (image partage WhatsApp / Insta)
