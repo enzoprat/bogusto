@@ -66,7 +66,7 @@
 Header fixed (shrink au scroll > 30px)
 ├─ Hero (logo central + 2 badges + titre massif + 2 CTA + 3 stats count-up + 2 bulles + 2 stamps tournants + wave SVG)
 ├─ Marquee défilante (orange, texte food-truck répété en boucle infinie 38s)
-├─ Story (eyebrow + titre + 3 mini-cards icônes : Maison / Rapide / 10€ le plat)
+├─ Story (eyebrow + titre + 3 mini-cards icônes : Maison / Rapide / Pâtes 10€ · Viandes 15€-20€)
 ├─ Compose ton plat (section rouge brique — builder accordéon + photo devanture polaroid)
 ├─ Menu filtrable (filtres horizontaux + cards avec picto SVG cartouche + tag varié + bouton Ajouter)
 ├─ Section livraison (rouge brique : adresse + horaires + paiements + réseaux + bouton Maps + encart blanc "Comment ça marche")
@@ -82,17 +82,22 @@ Header fixed (shrink au scroll > 30px)
 
 ## 5. Tunnel d'achat (CRITIQUE)
 
-**Plat à composer 10€ HORS boisson** — la canette est servie à part (2€).
+**Tous les plats HORS boisson** — la canette est servie à part (2€).
 
 ```
 Clic sur "+ Ajouter" sur un plat
-  → Modale plat (Base + Garniture + Garniture en + + Suppléments + Précision)
-  → Prix du bouton recalculé en live à chaque clic
+  → Modale pâtes   (Sauce + Garniture + Garniture en + + Suppléments + Précision)
+    ou modale viande (Accompagnement + Sauce + Sauce en + + Suppléments + Précision)
+  → Prix du bouton recalculé en live à chaque clic (base `data-base-price` + chips actives)
   → Confirmation → plat ajouté au panier
   → POPUP CANETTE qui s'ouvre 250ms après
     → "Ajouter une canette — 2,00€" ou "Continuer sans boisson"
     → canette ajoutée au panier en LIGNE SÉPARÉE
 ```
+
+**Accompagnement "Pâtes fraîches"** : ouvre un sous-bloc `#mPastaSauceWrap` avec les 6 sauces
+du menu pâtes. Changer d'accompagnement le referme ET désélectionne la sauce (sinon un
+supplément truffe resterait facturé).
 
 **Panier** : chaque ligne est un produit indépendant. Plat 10€ + Canette 2€ = 2 lignes (≠ 1 ligne 12€).
 
@@ -143,13 +148,13 @@ HTML natif `<details>` avec `<summary>` custom :
 <details class="acc" open>
   <summary class="acc__head">
     <span class="acc__num">1</span>
-    <span class="acc__title">Ta base</span>
-    <span class="acc__preview" data-preview-for="composeBase" data-placeholder="Choisir">Choisir</span>
+    <span class="acc__title">Ta sauce</span>
+    <span class="acc__preview" data-preview-for="composeSauce" data-placeholder="Choisir">Choisir</span>
     <span class="acc__chevron">▾</span>
   </summary>
   <div class="acc__body">
-    <div class="chips chips--wrap" id="composeBase"></div>
-    <!-- les chips sont générées par chipList() depuis BASES / GARNITURES / SUPPLEMENTS -->
+    <div class="chips chips--wrap" id="composeSauce"></div>
+    <!-- les chips sont générées par chipList() depuis SAUCES / GARNITURES / SUPPLEMENTS -->
   </div>
 </details>
 ```
@@ -272,10 +277,10 @@ function loadCart() { try { CART = JSON.parse(localStorage.getItem(CART_KEY)) ||
 {
   lineId:    uid(),                    // identifiant unique pour les actions
   productId: "compose",
-  name:      "Plat Bogusto — Crème de truffe",
-  meta:      "Crème de truffe (+4€) · Magret (+3€) · Sup. : Burrata 100g (+5€)",
+  name:      "Pâtes — Crème de truffe",
+  meta:      "Pâtes fraîches · Crème de truffe (+4€) · Kebab (+1€) · Sup. : Burrata 100g (+5€)",
   qty:       1,
-  unitPrice: 22
+  unitPrice: 20
 }
 
 // Actions
@@ -347,7 +352,7 @@ Au succès → cacher form, afficher encart vert ✓, vider panier.
 - 3 fichiers principaux : `index.html` + `style.css` + `script.js` + dossier `/assets/`
 - Pas de build step. Drag & drop sur Vercel ou Netlify suffit
 - Toutes les couleurs en variables CSS dans `:root`
-- Toute la carte en haut de `script.js` : `BASES`, `GARNITURES`, `SUPPLEMENTS`, `TIRAMISU_PARFUMS`, `MENU` — une seule source de vérité (les chips du builder et des modales en sont générées)
+- Toute la carte en haut de `script.js` : `SAUCES`, `GARNITURES`, `SUPPLEMENTS`, `VIANDES`, `ACCOMPAGNEMENTS`, `SAUCES_VIANDE`, `SUPPLEMENTS_VIANDE`, `TIRAMISU_PARFUMS`, `MENU` — une seule source de vérité (les chips du builder et des modales en sont générées)
 - Clé Web3Forms remplaçable en 1 endroit
 - Pas de Google Analytics par défaut
 - HTML sémantique (header / main / section / nav / footer)

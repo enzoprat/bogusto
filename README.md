@@ -27,24 +27,38 @@ celles des modales sont générées à partir de ces tableaux — on ne touche p
 
 | Tableau | Rôle |
 |---|---|
-| `BASES` | Les 6 bases. `extra` = supplément (crème de truffe : 4€) |
-| `GARNITURES` | Les 7 garnitures. `first` = supplément sur la garniture comprise · `extra` = prix d'une garniture en plus |
+| `SAUCES` | Les 6 sauces du menu pâtes. `extra` = supplément (crème de truffe : 4€) |
+| `GARNITURES` | Les 8 garnitures. `first` = supplément sur la garniture comprise · `extra` = prix d'une garniture en plus |
 | `SUPPLEMENTS` | Burrata 50g / 100g |
+| `VIANDES` | Les 6 plats du menu viande et leur prix |
+| `ACCOMPAGNEMENTS` | Riz yassa / mafé / haricots rouges / pâtes fraîches (`needsSauce` ouvre le choix de la sauce) |
+| `SAUCES_VIANDE` | Sauce verte / poivre |
+| `SUPPLEMENTS_VIANDE` | Brochettes x2 |
 | `TIRAMISU_PARFUMS` | Les parfums de tiramisu |
-| `MENU` | Les cards affichées dans la section carte (`cat` : `plat`, `dessert`, `boisson`) |
+| `MENU` | Les cards de la section carte (`cat` : `pates`, `viande`, `dessert`, `boisson`) |
 
-Prix globaux : `PLAT_PRICE` (10€), `SALADE_PRICE` (10€), `TIRAMISU_PRICE` (5€), `CANETTE_PRICE` (2€).
+Prix globaux : `PLAT_PRICE` (10€), `TIRAMISU_PRICE` (5€), `CANETTE_PRICE` (2€), `SAUCE_SUP_PRICE` (0,50€).
 
 ### La carte actuelle
 
-- **Plat à composer — 10€** : 1 base + 1 garniture
-  - Bases : crème de champignons · base crème classique · base tomate · La Spéciale (crème + tomate) · crème de truffe **+4€** · L'Italiana
-  - Garniture comprise : poulet, légumes, viande hachée, lardons de volaille · saumon fumé ou bœuf effiloché **+1€** · magret **+3€**
-  - Garniture en + : saumon fumé ou bœuf effiloché **3€** · magret **3€** · autres **2€**
-  - Suppléments : burrata 50g **3€** · burrata 100g **5€**
-- **Salade Burrata — 10€**
-- **Tiramisu — 5€** (M&M's, Spéculos, Oreo, classique cacao)
-- **Canette — 2€**, servie à part
+**🍝 Menu pâtes fraîches — plat à composer 10€** (1 sauce + 1 garniture)
+- Sauces : crème de champignons · base crème classique · base tomate · La Spéciale (crème + tomate) · crème de truffe **+4€** · L'Italiana
+- Garniture comprise : poulet, poulet effiloché, légumes, viande hachée, lardons de volaille · saumon fumé, kebab ou bœuf effiloché **+1€**
+- Garniture en + : saumon fumé ou bœuf effiloché **3€** · autres garnitures **2€**
+- Suppléments : burrata 50g **3€** · burrata 100g **5€**
+
+**🔥 Menu viande** (1 accompagnement + 1 sauce compris)
+- Ailes de poulet x4 · Brochettes de poulet x3 — **15€**
+- Magret entier · Faux-filet · Gigot d'agneau · Assiette Bog (brochettes x2 + 2 ailes) — **20€**
+- Accompagnements : riz sauce yassa · riz sauce mafé · riz haricots rouges · pâtes fraîches sauce au choix
+- Sauces : sauce verte · poivre — sauce en + **0,50€**
+- Supplément : brochettes x2 **5€**
+
+**🍮 Et aussi**
+- Tiramisu **5€** (M&M's, Spéculos, Oreo, classique cacao)
+- Canette **2€**, servie à part
+
+**Horaires** : du mercredi au dimanche, 19h00 – 00h00.
 
 ## Couleurs
 
@@ -71,10 +85,11 @@ npx vercel --prod
 ## Fonctionnalités
 
 - Hero impactant avec logo animé et stats count-up
-- Section « Compose ton plat » en accordéon (base → garniture → garniture en + → suppléments → précision) avec total live
+- Section « Compose ton plat » en accordéon (sauce → garniture → garniture en + → suppléments → précision) avec total live
+- Modale menu viande (accompagnement → sauce → sauce en + → suppléments), avec choix de sauce imbriqué quand l'accompagnement est « pâtes fraîches »
 - Carte filtrable par catégorie
 - Panier persistant (localStorage)
-- Modales d'options (plat à composer, tiramisu) avec prix recalculé en direct
+- Modales d'options (plat à composer, viandes, tiramisu) avec prix recalculé en direct
 - Popup canette après chaque plat (elle est servie à part)
 - Formulaire de commande relié à Web3Forms
 - Résumé de commande envoyé automatiquement

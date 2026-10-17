@@ -2293,3 +2293,36 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   color: var(--c-grey);
   letter-spacing: 0.3px;
 }
+
+/* ============================================
+   V9 — 2 menus : pâtes fraîches + viande
+   ============================================ */
+
+/* Intertitres dans le récap des prix */
+.menu__supplements-title {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  color: var(--c-yellow);
+  margin-top: 14px;
+}
+.menu__supplements p > .menu__supplements-title:first-child { margin-top: 0; }
+
+/* Note de bas de modale (canette à part) */
+.modal__foot {
+  font-size: 0.78rem;
+  color: var(--c-grey);
+  font-style: italic;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Sous-choix de sauce quand l'accompagnement est "Pâtes fraîches" */
+#mPastaSauceWrap {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border: 2px dashed var(--c-grey-light);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.5);
+}
+#mPastaSauceWrap .acc__hint { margin: 0 0 10px; font-style: normal; font-weight: 600; }
