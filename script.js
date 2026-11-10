@@ -652,45 +652,53 @@ function initForm() {
       return;
     }
 
-    const lines = CART.map(it => {
-      const subtotal = eur(it.unitPrice * (it.qty || 1));
-      const meta = it.meta ? ` (${it.meta})` : "";
-      return `${it.qty || 1}x ${it.name}${meta} — ${subtotal}`;
-    }).join("\n");
-
-    const total = eur(cartTotal());
-    const summary = `${lines}\n\n— TOTAL ESTIMATIF : ${total}`;
-
-    $("#commandeResume").value = summary;
-    $("#totalEstimatif").value = total;
+    const champs = new FormData(form);
+    const commande = {
+      nom:         champs.get("nom") || "",
+      telephone:   champs.get("telephone") || "",
+      mode:        champs.get("mode") || "",
+      date:        champs.get("date") || "",
+      heure:       champs.get("heure") || "",
+      paiement:    champs.get("paiement") || "",
+      commentaire: champs.get("commentaire") || "",
+      botcheck:    champs.get("botcheck") ? 1 : 0,
+      lignes: CART.map(it => ({
+        qte:  it.qty || 1,
+        nom:  it.name,
+        meta: it.meta || "",
+        prix: it.unitPrice,
+      })),
+      total: cartTotal(),
+    };
 
     const submitBtn = $("#submitBtn");
+    const libelle = submitBtn.textContent;
     submitBtn.disabled = true;
     submitBtn.textContent = "Envoi en cours...";
 
     try {
-      const data = new FormData(form);
-      const res = await fetch("https://api.web3forms.com/submit", {
+      const res = await fetch("/api/commande", {
         method: "POST",
-        body: data,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(commande),
       });
-      const json = await res.json();
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error || "Erreur d'envoi");
 
-      if (json.success) {
-        form.querySelectorAll("input, select, textarea, button").forEach(el => el.style.display = "none");
-        $("#orderSuccess").hidden = false;
-        $("#orderSuccess").style.display = "block";
-        CART = [];
-        saveCart();
-        renderCart();
-        window.scrollTo({ top: $("#commander").offsetTop - 80, behavior: "smooth" });
-      } else {
-        throw new Error(json.message || "Erreur d'envoi");
-      }
+      const num = $("#orderNumero");
+      if (num) num.textContent = json.numero || "—";
+      form.querySelectorAll("input, select, textarea, button, label, .orderform__row, .orderform__legal")
+        .forEach(el => el.style.display = "none");
+      $("#orderSuccess").hidden = false;
+      $("#orderSuccess").style.display = "block";
+      CART = [];
+      saveCart();
+      renderCart();
+      window.scrollTo({ top: $("#commander").offsetTop - 80, behavior: "smooth" });
     } catch (err) {
-      alert("Une erreur est survenue lors de l'envoi. Vérifie que la clé Web3Forms est bien configurée dans le code.");
+      alert(err.message || "Une erreur est survenue lors de l'envoi.");
       submitBtn.disabled = false;
-      submitBtn.textContent = "Envoyer ma commande";
+      submitBtn.textContent = libelle;
     }
   });
 }

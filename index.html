@@ -390,12 +390,7 @@
         </aside>
 
         <!-- FORM -->
-        <form class="orderform" id="orderForm" action="https://api.web3forms.com/submit" method="POST">
-          <input type="hidden" name="access_key" value="REMPLACER_PAR_LA_CLE_WEB3FORMS" />
-          <input type="hidden" name="subject" value="Nouvelle commande Bogusto" />
-          <input type="hidden" name="from_name" value="Site Bogusto" />
-          <input type="hidden" name="commande_resume" id="commandeResume" value="" />
-          <input type="hidden" name="total_estimatif" id="totalEstimatif" value="0,00€" />
+        <form class="orderform" id="orderForm" method="POST" novalidate="false">
           <input type="checkbox" name="botcheck" class="hidden" style="display: none;" tabindex="-1" autocomplete="off" />
 
           <div class="orderform__row">
@@ -457,6 +452,7 @@
           <div class="orderform__success" id="orderSuccess" hidden>
             <div class="success-icon">✓</div>
             <h3>Commande envoyée !</h3>
+            <p class="order-numero">Numéro de commande<br /><strong id="orderNumero">—</strong></p>
             <p>L'équipe Bogusto revient vers toi pour confirmer le créneau et le total. Merci pour ta confiance 🍝</p>
           </div>
         </form>

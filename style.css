@@ -2374,3 +2374,20 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .product__add--out::before { content: none; }
 .product__add--out:hover { background: var(--c-grey-light); transform: none; }
+
+/* Numéro de commande sur l'écran de confirmation */
+.order-numero {
+  font-size: 0.85rem;
+  color: var(--c-grey);
+  text-align: center;
+  margin: 10px 0 14px;
+  letter-spacing: 1px;
+}
+.order-numero strong {
+  display: inline-block;
+  margin-top: 6px;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  letter-spacing: 2px;
+  color: var(--c-orange);
+}
