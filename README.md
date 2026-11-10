@@ -22,8 +22,11 @@ s'affiche « épuisé », barré, et n'est plus commandable.
 ### Mise en service (2 étapes, une seule fois)
 
 1. **Stockage** — dans le projet Vercel, onglet *Storage* → *Marketplace* →
-   installer une base **Redis (Upstash)**. L'intégration injecte automatiquement
-   `UPSTASH_REDIS_REST_URL` et `UPSTASH_REDIS_REST_TOKEN` dans le projet.
+   installer une base **Redis (Upstash)**, plan gratuit, région Frankfurt.
+   L'intégration injecte les variables toute seule. Selon le mode de connexion
+   elles s'appellent `KV_REST_API_URL` / `KV_REST_API_TOKEN` ou
+   `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` : `api/_store.js`
+   accepte les deux jeux de noms.
 2. **Mot de passe** — *Settings* → *Environment Variables* → ajouter
    `DASH_PASSWORD` avec le mot de passe du gérant.
 
