@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/app",
+      "destination": "https://github.com/enzoprat/bogusto/releases/latest/download/app-debug.apk",
+      "permanent": false
+    }
+  ]
+}
