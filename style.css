@@ -214,12 +214,15 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 .hero__grid {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 60px;
   align-items: center;
   position: relative;
   z-index: 2;
 }
+/* Le hero n'a plus de colonne visuelle : on borne la largeur du texte
+   pour qu'il ne file pas d'un bord à l'autre sur grand écran. */
+.hero__content { max-width: 760px; }
 
 .hero__badge-row {
   display: flex; flex-wrap: wrap; gap: 10px;
@@ -2512,3 +2515,15 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .desserts__visual { max-width: 380px; margin: 0 auto; }
   .product__photo { height: 130px; }
 }
+
+/* Rappel des créneaux sous les listes jour/heure */
+.orderform__creneau {
+  font-size: 0.82rem;
+  color: var(--c-grey);
+  line-height: 1.5;
+  margin: -6px 0 4px;
+  padding: 10px 14px;
+  background: var(--c-cream-alt);
+  border-radius: var(--radius-sm);
+}
+.orderform__creneau strong { color: var(--c-orange); }

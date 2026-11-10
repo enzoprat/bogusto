@@ -34,6 +34,11 @@ module.exports = async (req, res) => {
     return res.status(400).json({ error: "La commande est vide." });
   }
 
+  // Le créneau est aussi contrôlé ici : les listes du site ne protègent
+  // que l'utilisateur honnête, pas un POST fabriqué à la main.
+  const souci = creneauInvalide(txt(body.dateIso), txt(body.heure));
+  if (souci) return res.status(400).json({ error: souci });
+
   const commande = {
     id: numero(),
     recue: new Date().toISOString(),
@@ -41,6 +46,7 @@ module.exports = async (req, res) => {
     telephone,
     mode: txt(body.mode),
     date: txt(body.date),
+    dateIso: txt(body.dateIso),
     heure: txt(body.heure),
     paiement: txt(body.paiement),
     commentaire: txt(body.commentaire),
@@ -72,6 +78,42 @@ module.exports = async (req, res) => {
 
   return res.status(200).json({ ok: true, numero: commande.id });
 };
+
+/* ---------- créneaux de retrait ----------
+   Service du mercredi au dimanche, 19h → minuit (dernier créneau 23h45). */
+
+const JOURS_SERVICE = [3, 4, 5, 6, 0];   // mercredi → dimanche (0 = dimanche)
+const PREMIER_CRENEAU = 19 * 60;
+const DERNIER_CRENEAU = 23 * 60 + 45;
+const HORIZON_JOURS = 30;
+
+/** Renvoie null si le créneau est bon, sinon le message à afficher. */
+function creneauInvalide(iso, heure) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return "Choisis un jour de retrait.";
+  if (!/^\d{2}:\d{2}$/.test(heure)) return "Choisis une heure de retrait.";
+
+  const [a, m, j] = iso.split("-").map(Number);
+  const jour = new Date(Date.UTC(a, m - 1, j));
+  if (jour.getUTCFullYear() !== a || jour.getUTCMonth() !== m - 1 || jour.getUTCDate() !== j) {
+    return "Ce jour de retrait n'existe pas.";
+  }
+  if (!JOURS_SERVICE.includes(jour.getUTCDay())) {
+    return "On ne sert que du mercredi au dimanche.";
+  }
+
+  const maintenant = new Date();
+  const aujourdhui = Date.UTC(maintenant.getUTCFullYear(), maintenant.getUTCMonth(), maintenant.getUTCDate());
+  const ecart = Math.round((jour.getTime() - aujourdhui) / 86400000);
+  if (ecart < 0) return "Ce jour est déjà passé.";
+  if (ecart > HORIZON_JOURS) return "On ne prend pas les commandes aussi loin à l'avance.";
+
+  const [hh, mm] = heure.split(":").map(Number);
+  const minutes = hh * 60 + mm;
+  if (minutes < PREMIER_CRENEAU || minutes > DERNIER_CRENEAU) {
+    return "Le retrait se fait entre 19h et minuit.";
+  }
+  return null;
+}
 
 /* ---------- helpers ---------- */
 

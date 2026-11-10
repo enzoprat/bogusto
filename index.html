@@ -68,44 +68,6 @@
           <a href="#menu" class="btn btn--ghost btn--large">Voir les 2 menus</a>
         </div>
 
-        <div class="hero__features">
-          <div class="hero__feature">
-            <strong data-count-to="7" data-suffix="">0</strong>
-            <span>sauces maison</span>
-          </div>
-          <div class="hero__feature">
-            <strong data-count-to="9" data-suffix="">0</strong>
-            <span>garnitures</span>
-          </div>
-          <div class="hero__feature">
-            <strong data-count-to="10" data-suffix="€">0€</strong>
-            <span>le plat</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="hero__visual">
-        <div class="hero__pizza hero__pizza--logo" aria-hidden="true">
-          <img src="assets/bogusto.png" alt="Bogusto" class="hero__logo-img" />
-        </div>
-
-        <div class="hero__bubble hero__bubble--1">
-          <span>🌿</span> Sauces <br/><strong>maison</strong>
-        </div>
-        <div class="hero__bubble hero__bubble--2">
-          <span>⚡</span> Click & <br/><strong>Collect</strong>
-        </div>
-
-        <div class="stamp stamp--frais" aria-hidden="true">
-          <span>★</span>
-          <strong>FATTE<br/>BENE</strong>
-          <span>★</span>
-        </div>
-        <div class="stamp stamp--bdx" aria-hidden="true">
-          <em>Made in</em>
-          <strong>BORDEAUX</strong>
-          <small>· cucina italiana ·</small>
-        </div>
       </div>
     </div>
 
@@ -408,14 +370,22 @@
 
           <div class="orderform__row">
             <label>
-              <span>Date / créneau *</span>
-              <input type="text" name="date" required placeholder="Aujourd'hui, demain..." />
+              <span>Jour de retrait *</span>
+              <select name="dateIso" id="champJour" required>
+                <option value="">Choisis...</option>
+              </select>
             </label>
             <label>
-              <span>Heure souhaitée *</span>
-              <input type="time" name="heure" required />
+              <span>Heure de retrait *</span>
+              <select name="heure" id="champHeure" required>
+                <option value="">Choisis le jour d'abord</option>
+              </select>
             </label>
           </div>
+          <p class="orderform__creneau">
+            Retrait du <strong>mercredi au dimanche, de 19h à minuit</strong>.
+            Tu peux commander à l'avance : un lundi pour le mercredi, par exemple.
+          </p>
 
           <label>
             <span>Mode de paiement *</span>

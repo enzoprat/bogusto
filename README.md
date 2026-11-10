@@ -123,6 +123,13 @@ bouteille d'eau et le tiramisu. Choisir le tiramisu rouvre la modale des parfums
 **Commandes** : Click & Collect uniquement. Paiement sur place en espèces, carte
 ou Apple/Google Pay — plus de ticket restaurant.
 
+**Créneaux de retrait** : du mercredi au dimanche, de 19h à minuit (dernier créneau
+23h45, par tranches de 15 min). Le site propose les jours ouverts des trois
+prochaines semaines, donc on peut commander un lundi pour le mercredi. Pour le jour
+même, seuls les créneaux encore atteignables apparaissent (20 min de marge).
+Le créneau est **revalidé dans `api/commande.js`** : les listes du formulaire ne
+protègent que l'utilisateur honnête, pas un POST fabriqué à la main.
+
 **Horaires** : du mercredi au dimanche, 19h00 – 00h00.
 
 ## Couleurs

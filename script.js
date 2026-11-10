@@ -718,6 +718,82 @@ function renderCart() {
   });
 }
 
+/* ---------- CRÉNEAUX DE RETRAIT ----------
+   Service du mercredi au dimanche, 19h → minuit. On propose les jours
+   ouverts des trois prochaines semaines, et pour aujourd'hui seulement
+   les créneaux encore atteignables. */
+const JOURS_SERVICE = [3, 4, 5, 6, 0];   // mercredi → dimanche (0 = dimanche)
+const OUVERTURE_H = 19;
+const DERNIER_CRENEAU = "23:45";
+const DELAI_PREPA_MIN = 20;              // marge avant le premier créneau du soir
+
+const NOMS_JOURS = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+const NOMS_MOIS = ["janvier", "février", "mars", "avril", "mai", "juin",
+                   "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+
+const isoDe = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+function libelleJour(d, aujourdhui) {
+  const base = `${NOMS_JOURS[d.getDay()]} ${d.getDate()} ${NOMS_MOIS[d.getMonth()]}`;
+  return aujourdhui ? `aujourd'hui, ${base}` : base;
+}
+
+/** Les jours de service des 3 prochaines semaines, aujourd'hui compris si le service n'est pas fini. */
+function joursDisponibles() {
+  const out = [];
+  const maintenant = new Date();
+  for (let i = 0; i < 21; i++) {
+    const d = new Date(maintenant.getFullYear(), maintenant.getMonth(), maintenant.getDate() + i);
+    if (!JOURS_SERVICE.includes(d.getDay())) continue;
+    if (i === 0 && !creneauxDuJour(d).length) continue;  // trop tard ce soir
+    out.push({ iso: isoDe(d), libelle: libelleJour(d, i === 0) });
+  }
+  return out;
+}
+
+/** Créneaux de 15 min entre 19h et 23h45 ; pour aujourd'hui, uniquement ceux à venir. */
+function creneauxDuJour(d) {
+  const estAujourdhui = isoDe(d) === isoDe(new Date());
+  let minimum = OUVERTURE_H * 60;
+  if (estAujourdhui) {
+    const maintenant = new Date();
+    const depuisMinuit = maintenant.getHours() * 60 + maintenant.getMinutes() + DELAI_PREPA_MIN;
+    minimum = Math.max(minimum, Math.ceil(depuisMinuit / 15) * 15);
+  }
+  const [hFin, mFin] = DERNIER_CRENEAU.split(":").map(Number);
+  const maximum = hFin * 60 + mFin;
+
+  const out = [];
+  for (let t = minimum; t <= maximum; t += 15) {
+    out.push(`${String(Math.floor(t / 60)).padStart(2, "0")}:${String(t % 60).padStart(2, "0")}`);
+  }
+  return out;
+}
+
+function initCreneaux() {
+  const jour = $("#champJour");
+  const heure = $("#champHeure");
+  if (!jour || !heure) return;
+
+  const jours = joursDisponibles();
+  jour.innerHTML = '<option value="">Choisis...</option>' +
+    jours.map(j => `<option value="${j.iso}">${j.libelle}</option>`).join("");
+
+  function majHeures() {
+    if (!jour.value) {
+      heure.innerHTML = '<option value="">Choisis le jour d\'abord</option>';
+      return;
+    }
+    const [a, m, d] = jour.value.split("-").map(Number);
+    const creneaux = creneauxDuJour(new Date(a, m - 1, d));
+    heure.innerHTML = '<option value="">Choisis...</option>' +
+      creneaux.map(c => `<option value="${c}">${c.replace(":", "h")}</option>`).join("");
+  }
+
+  jour.addEventListener("change", majHeures);
+  majHeures();
+}
+
 /* ---------- FORM SUBMIT ---------- */
 function initForm() {
   const form = $("#orderForm");
@@ -730,11 +806,16 @@ function initForm() {
     }
 
     const champs = new FormData(form);
+    const jourSelect = $("#champJour");
+    const jourLisible = jourSelect && jourSelect.selectedIndex > 0
+      ? jourSelect.options[jourSelect.selectedIndex].text
+      : "";
     const commande = {
       nom:         champs.get("nom") || "",
       telephone:   champs.get("telephone") || "",
       mode:        champs.get("mode") || "",
-      date:        champs.get("date") || "",
+      date:        jourLisible,
+      dateIso:     champs.get("dateIso") || "",
       heure:       champs.get("heure") || "",
       paiement:    champs.get("paiement") || "",
       commentaire: champs.get("commentaire") || "",
@@ -890,6 +971,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderCart();
   initCompose();
   initDesserts();
+  initCreneaux();
   initFilters();
   initForm();
   initBurger();
