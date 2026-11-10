@@ -348,20 +348,26 @@ const MODAL_MULTI  = ["#mGarnitureExtra", "#mSupp", "#mSauceExtra"];
 document.addEventListener("click", (e) => {
   if (e.target.closest("[data-close]")) closeModal();
 
-  // Choix unique
-  MODAL_SINGLE.forEach(id => {
-    if (e.target.matches(`${id} .chip`)) {
-      $$(`${id} .chip`).forEach(c => c.classList.remove("is-active"));
-      e.target.classList.add("is-active");
-    }
-  });
+  // Une chip contient une vignette et un libellé : le clic atterrit sur un
+  // enfant, pas sur le bouton. On remonte au bouton avec closest(), sans quoi
+  // la sélection ne se fait jamais.
+  const chip = e.target.closest(".modal .chip");
+  if (chip && !chip.disabled) {
+    // Choix unique
+    MODAL_SINGLE.forEach(id => {
+      if (chip.matches(`${id} .chip`)) {
+        $$(`${id} .chip`).forEach(c => c.classList.remove("is-active"));
+        chip.classList.add("is-active");
+      }
+    });
 
-  // Choix multiples
-  MODAL_MULTI.forEach(id => {
-    if (e.target.matches(`${id} .chip`)) e.target.classList.toggle("is-active");
-  });
+    // Choix multiples
+    MODAL_MULTI.forEach(id => {
+      if (chip.matches(`${id} .chip`)) chip.classList.toggle("is-active");
+    });
 
-  if (e.target.matches(".modal .chip")) refreshModalPrice();
+    refreshModalPrice();
+  }
 
   // CONFIRM PLAT À COMPOSER (pâtes fraîches)
   if (e.target.id === "confirmCompose") {
