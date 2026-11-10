@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F5E8C8"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="BOGUSTO"
+        android:textColor="#A02828"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.08" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Impression des commandes"
+        android:textColor="#6E4A2C"
+        android:textSize="14sp"
+        android:layout_marginBottom="22dp" />
+
+    <TextView
+        android:id="@+id/etat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Demarrage…"
+        android:textColor="#3A2818"
+        android:textSize="26sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#6E4A2C"
+        android:textSize="15sp"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="22dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="22dp">
+
+        <Button
+            android:id="@+id/test"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="Ticket de test" />
+
+        <Button
+            android:id="@+id/reglages"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Reglages" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Journal"
+        android:textColor="#A02828"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.1" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="6dp">
+
+        <TextView
+            android:id="@+id/journal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#6E4A2C"
+            android:textSize="13sp"
+            android:fontFamily="monospace"
+            android:lineSpacingExtra="3dp" />
+    </ScrollView>
+</LinearLayout>
