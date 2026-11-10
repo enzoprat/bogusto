@@ -13,9 +13,20 @@ HTML / CSS / JS vanilla — pas de framework, prêt à déployer sur Vercel.
 - `api/` — Fonctions serverless Vercel (`dispo`, `login`)
 - `DESIGN.md` — Spécification complète du design system
 
-## Gestion des stocks (`/dash`)
+## Le dash (`/dash`)
 
-Le gérant se connecte sur `/dash` et met en sommeil ce qui est en rupture : les
+Deux onglets, protégés par le même mot de passe.
+
+### Commandes
+
+La file des commandes reçues du site : numéro, heure, client, téléphone cliquable,
+créneau, lignes détaillées, commentaire et total. La liste se rafraîchit toutes les
+20 secondes et un bip signale une nouvelle commande. « Fait » retire la commande
+de la file.
+
+### Stocks
+
+Le gérant met en sommeil ce qui est en rupture : les
 8 plats, les 7 sauces, les 9 garnitures et les 3 suppléments. Côté client, l'élément
 s'affiche « épuisé », barré, et n'est plus commandable.
 
@@ -29,6 +40,10 @@ s'affiche « épuisé », barré, et n'est plus commandable.
    accepte les deux jeux de noms.
 2. **Mot de passe** — *Settings* → *Environment Variables* → ajouter
    `DASH_PASSWORD` avec le mot de passe du gérant.
+3. **Jeton du terminal** (pour l'impression automatique) — ajouter
+   `TERMINAL_TOKEN`, une chaîne aléatoire longue, que l'app du terminal Sunmi
+   enverra en `Authorization: Bearer`. Tant qu'il n'existe pas, seul le dash
+   peut lire la file.
 
 Puis redéployer. Tant que ces variables n'existent pas, le site fonctionne
 normalement (tout est disponible) et le dash affiche un avertissement.
@@ -37,6 +52,9 @@ normalement (tout est disponible) et le dash affiche un avertissement.
 
 | Route | Rôle |
 |---|---|
+| `POST /api/commande` | Reçoit une commande du formulaire du site. Public. Valide les champs, attribue un numéro court (`B` + heure + 2 chiffres) et empile dans Redis. Pot de miel anti-robot. |
+| `GET /api/commandes` | La file d'attente. Accepte soit le cookie du dash, soit `Authorization: Bearer <TERMINAL_TOKEN>` pour le terminal d'impression. Jamais en cache. |
+| `POST /api/commandes` | `{ imprimees: [...] }` retire des commandes de la file. Mêmes accès. |
 | `GET /api/dispo` | Liste publique des identifiants en sommeil. Ne renvoie jamais d'erreur bloquante : en cas de pépin, la liste est vide et tout reste commandable. |
 | `POST /api/dispo` | Met à jour la liste. Exige le cookie de session du dash. |
 | `GET /api/login` | État de la session. |

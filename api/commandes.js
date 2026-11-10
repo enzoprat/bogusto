@@ -2,21 +2,25 @@
    GET  /api/commandes   → { commandes: [...] }   file d'impression
    POST /api/commandes   { imprimees: ["B194207"] } → retire de la file
 
-   Réservé au terminal Sunmi : jeton TERMINAL_TOKEN, envoyé dans l'en-tête
-   Authorization: Bearer <jeton>. Jamais mis en cache.
+   Deux accès possibles, le même contenu :
+     · le terminal Sunmi — en-tête Authorization: Bearer <TERMINAL_TOKEN>
+     · le dash — cookie de session posé par /api/login
+   Jamais mis en cache.
    ============================================ */
 
 const crypto = require("crypto");
 const store = require("./_store");
+const auth = require("./_auth");
 
 module.exports = async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
 
-  if (!tokenConfigured()) {
-    return res.status(503).json({ error: "TERMINAL_TOKEN n'est pas défini côté serveur." });
-  }
-  if (!verifyToken(req)) {
-    return res.status(401).json({ error: "Jeton invalide." });
+  if (!verifyToken(req) && !auth.verifySession(req)) {
+    return res.status(401).json({
+      error: tokenConfigured() || auth.isConfigured()
+        ? "Accès refusé : jeton ou session invalide."
+        : "Ni TERMINAL_TOKEN ni DASH_PASSWORD ne sont définis côté serveur.",
+    });
   }
   if (!store.isConfigured()) {
     return res.status(503).json({ error: "Stockage non configuré." });
@@ -58,6 +62,7 @@ function tokenConfigured() {
 
 function verifyToken(req) {
   const attendu = process.env.TERMINAL_TOKEN || "";
+  if (!attendu) return false;
   const entete = req.headers.authorization || "";
   const recu = entete.startsWith("Bearer ") ? entete.slice(7).trim() : "";
   if (!recu) return false;

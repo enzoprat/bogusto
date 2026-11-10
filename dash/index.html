@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
-  <title>Bogusto — Gestion des stocks</title>
+  <title>Bogusto — Commandes &amp; stocks</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -102,6 +102,49 @@
     .toast.is-err { background: var(--c-orange); }
 
     .note { font-size: .8rem; color: var(--c-grey); line-height: 1.5; margin-top: 10px; }
+
+    /* ---- onglets ---- */
+    .tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+    .tab {
+      flex: 1; padding: 13px 10px; border: 2px solid var(--c-line); background: #fff;
+      border-radius: 12px; font-family: var(--font-body); font-weight: 700; font-size: .92rem;
+      color: var(--c-grey); cursor: pointer;
+    }
+    .tab.is-on { background: var(--c-night); border-color: var(--c-night); color: var(--c-cream); }
+    .tab__n {
+      display: inline-block; min-width: 22px; margin-left: 6px; padding: 1px 6px;
+      border-radius: 999px; background: var(--c-orange); color: #fff; font-size: .78rem;
+    }
+    .tab.is-on .tab__n { background: var(--c-yellow); color: var(--c-deep); }
+
+    /* ---- commandes ---- */
+    .cmd {
+      background: #fff; border: 2px solid var(--c-line); border-left: 8px solid var(--c-orange);
+      border-radius: 14px; padding: 16px 16px 14px; margin-bottom: 14px;
+    }
+    .cmd.is-new { border-left-color: var(--c-olive); animation: pulse 1.4s ease-in-out 3; }
+    @keyframes pulse { 50% { box-shadow: 0 0 0 6px rgba(110,140,58,.18); } }
+    .cmd__head { display: flex; align-items: baseline; gap: 10px; }
+    .cmd__num { font-family: var(--font-display); font-size: 1.15rem; color: var(--c-orange); letter-spacing: 1px; }
+    .cmd__h { margin-left: auto; font-size: .82rem; color: var(--c-grey); font-weight: 600; }
+    .cmd__nom { font-weight: 700; font-size: 1.02rem; margin-top: 8px; }
+    .cmd__tel { display: inline-block; margin-top: 4px; font-weight: 700; color: var(--c-orange); text-decoration: none; font-size: 1rem; }
+    .cmd__meta { font-size: .82rem; color: var(--c-grey); margin-top: 6px; line-height: 1.5; }
+    .cmd__lignes { margin: 12px 0 0; border-top: 2px dashed var(--c-line); padding-top: 10px; }
+    .cmd__l { display: flex; gap: 10px; align-items: baseline; padding: 5px 0; }
+    .cmd__q { font-weight: 700; color: var(--c-deep); min-width: 26px; }
+    .cmd__ln { flex: 1; }
+    .cmd__lnom { font-weight: 600; font-size: .95rem; }
+    .cmd__lmeta { font-size: .78rem; color: var(--c-grey); line-height: 1.45; margin-top: 2px; }
+    .cmd__p { font-weight: 700; white-space: nowrap; }
+    .cmd__note {
+      margin-top: 10px; padding: 10px 12px; background: #fdf3e0; border-radius: 10px;
+      font-size: .86rem; font-style: italic;
+    }
+    .cmd__pied { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
+    .cmd__total { font-family: var(--font-display); font-size: 1.4rem; color: var(--c-deep); }
+    .cmd__pied .btn { margin-left: auto; padding: 11px 22px; }
+    .vide { text-align: center; color: var(--c-grey); padding: 40px 16px; font-size: .92rem; line-height: 1.6; }
     .warn { background: #fdf3e0; border: 2px solid var(--c-yellow); border-radius: 14px; padding: 14px 16px; font-size: .86rem; line-height: 1.5; margin-bottom: 18px; }
     [hidden] { display: none !important; }
   </style>
@@ -110,7 +153,7 @@
 
   <header class="top" id="top" hidden>
     <div class="top__in">
-      <h1>BOGUSTO <small>Gestion des stocks</small></h1>
+      <h1>BOGUSTO <small>Commandes &amp; stocks</small></h1>
       <button class="btn btn--ghost" id="logout">Déconnexion</button>
     </div>
   </header>
@@ -132,6 +175,20 @@
   <main class="wrap" id="dash" hidden>
     <div class="warn" id="storeWarn" hidden></div>
 
+    <div class="tabs">
+      <button class="tab is-on" data-vue="commandes">Commandes<span class="tab__n" id="tabN">0</span></button>
+      <button class="tab" data-vue="stocks">Stocks</button>
+    </div>
+
+    <section id="vueCommandes">
+      <div id="cmds"></div>
+      <p class="note">
+        La liste se rafraîchit toute seule. « Fait » retire la commande de la file —
+        à utiliser une fois qu'elle est préparée ou que le client a été rappelé.
+      </p>
+    </section>
+
+    <section id="vueStocks" hidden>
     <div class="state" id="state">
       <span class="state__n" id="stateN">0</span>
       <span id="stateTxt">élément en sommeil</span>
@@ -145,6 +202,7 @@
       Compte jusqu'à une minute pour que le changement se propage à tous les visiteurs
       (le site met la disponibilité en cache quelques secondes).
     </p>
+    </section>
   </main>
 
   <div class="toast" id="toast" role="status"></div>
@@ -166,6 +224,9 @@
     function eurTxt(n) { return String(n).replace(".", ",") + "€"; }
 
     let sommeil = new Set();
+    let commandes = [];
+    let vues = new Set();        // numeros deja affiches, pour reperer les nouvelles
+    let minuteur = null;
 
     /* ---------- toast ---------- */
     let tTimer = null;
@@ -215,6 +276,100 @@
       renderState();
     }
 
+    /* ---------- COMMANDES ---------- */
+    const eurTxt2 = (n) => (Math.round(n * 100) / 100).toFixed(2).replace(".", ",") + "€";
+    const echappe = (t) => String(t == null ? "" : t)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+    function heureDe(iso) {
+      const d = new Date(iso);
+      return isNaN(d) ? "" : d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+    }
+
+    function renderCommandes() {
+      const root = $("#cmds");
+      $("#tabN").textContent = commandes.length;
+
+      if (!commandes.length) {
+        root.innerHTML = '<div class="vide">Aucune commande en attente.<br />' +
+          'Les nouvelles commandes du site apparaissent ici automatiquement.</div>';
+        return;
+      }
+
+      root.innerHTML = commandes.map(c => {
+        const neuve = !vues.has(c.id);
+        const infos = [c.mode, c.date, c.heure, c.paiement].filter(Boolean).join(" · ");
+        const tel = String(c.telephone || "").replace(/[^0-9+]/g, "");
+        return `
+          <div class="cmd${neuve ? " is-new" : ""}">
+            <div class="cmd__head">
+              <span class="cmd__num">${echappe(c.id)}</span>
+              <span class="cmd__h">reçue à ${heureDe(c.recue)}</span>
+            </div>
+            <div class="cmd__nom">${echappe(c.nom)}</div>
+            <a class="cmd__tel" href="tel:${echappe(tel)}">${echappe(c.telephone)}</a>
+            ${infos ? `<div class="cmd__meta">${echappe(infos)}</div>` : ""}
+            <div class="cmd__lignes">
+              ${(c.lignes || []).map(l => `
+                <div class="cmd__l">
+                  <span class="cmd__q">${l.qte}×</span>
+                  <span class="cmd__ln">
+                    <span class="cmd__lnom">${echappe(l.nom)}</span>
+                    ${l.meta ? `<span class="cmd__lmeta">${echappe(l.meta)}</span>` : ""}
+                  </span>
+                  <span class="cmd__p">${eurTxt2((l.prix || 0) * (l.qte || 1))}</span>
+                </div>`).join("")}
+            </div>
+            ${c.commentaire ? `<div class="cmd__note">« ${echappe(c.commentaire)} »</div>` : ""}
+            <div class="cmd__pied">
+              <span class="cmd__total">${eurTxt2(c.total || 0)}</span>
+              <button class="btn" data-fait="${echappe(c.id)}">Fait</button>
+            </div>
+          </div>`;
+      }).join("");
+
+      commandes.forEach(c => vues.add(c.id));
+    }
+
+    async function chargeCommandes() {
+      try {
+        const data = await api("/api/commandes");
+        const avant = commandes.length;
+        commandes = Array.isArray(data.commandes) ? data.commandes : [];
+        renderCommandes();
+        if (commandes.length > avant) bip();
+      } catch (e) {
+        if (/session|refus/i.test(e.message)) return showLogin(e.message);
+      }
+    }
+
+    async function fait(id, btn) {
+      btn.disabled = true;
+      try {
+        await api("/api/commandes", { method: "POST", body: JSON.stringify({ imprimees: [id] }) });
+        commandes = commandes.filter(c => c.id !== id);
+        renderCommandes();
+        toast("Commande " + id + " retirée de la file ✓");
+      } catch (e) {
+        btn.disabled = false;
+        toast(e.message, true);
+      }
+    }
+
+    /* Petit bip de synthese : pas de fichier son a embarquer. */
+    function bip() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = "sine"; o.frequency.value = 880;
+        g.gain.setValueAtTime(0.0001, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.5);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(); o.stop(ctx.currentTime + 0.5);
+      } catch (e) { /* navigateur qui refuse le son : tant pis */ }
+    }
+
     /* ---------- API ---------- */
     async function api(path, opts) {
       const res = await fetch(path, Object.assign({ headers: { "Content-Type": "application/json" } }, opts));
@@ -261,10 +416,19 @@
       $("#pw").focus();
     }
 
+    function montreVue(nom) {
+      $("#vueCommandes").hidden = nom !== "commandes";
+      $("#vueStocks").hidden = nom !== "stocks";
+      document.querySelectorAll(".tab").forEach(t => t.classList.toggle("is-on", t.dataset.vue === nom));
+    }
+
     async function showDash() {
       $("#login").hidden = true;
       $("#top").hidden = false;
       $("#dash").hidden = false;
+      await chargeCommandes();
+      clearInterval(minuteur);
+      minuteur = setInterval(chargeCommandes, 20000);
       try {
         const data = await api("/api/dispo");
         sommeil = new Set(data.sommeil || []);
@@ -282,7 +446,12 @@
       const sw = e.target.closest(".sw");
       if (sw) return toggle(sw.dataset.id, sw);
       if (e.target.id === "resetAll") return resetAll();
+      const tab = e.target.closest(".tab");
+      if (tab) return montreVue(tab.dataset.vue);
+      const btnFait = e.target.closest("[data-fait]");
+      if (btnFait) return fait(btnFait.dataset.fait, btnFait);
       if (e.target.id === "logout") {
+        clearInterval(minuteur);
         api("/api/login?logout=1", { method: "POST" }).finally(() => showLogin("À bientôt."));
       }
     });
