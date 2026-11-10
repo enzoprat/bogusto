@@ -14,6 +14,7 @@ const PLAT_PRICE      = 10;   // plat à composer (pâtes fraîches)
 const SALADE_PRICE    = 10;   // salade de burrata 100g
 const TIRAMISU_PRICE  = 5;    // tiramisu, parfum au choix
 const CANETTE_PRICE   = 2;    // canette, à part
+const EAU_PRICE       = 1;    // bouteille d'eau, à part
 const SAUCE_SUP_PRICE = 0.5;  // supplément sauce (menu viandes)
 
 /* ===== MENU PÂTES FRAÎCHES ===== */
@@ -75,11 +76,26 @@ const SAUCES_VIANDE = [
 /* ===== DESSERTS ===== */
 const TIRAMISU_PARFUMS = ["M&M's", "Spéculos", "Oreo", "Classique cacao"];
 
+/* ---------- PHOTOS ----------
+   Decoupees dans les deux flyers (script scratchpad/extrait.py).
+   Convention : assets/plats/<id>.webp — l'identifiant d'un element
+   suffit donc a retrouver sa photo. */
+const PHOTOS = new Set([
+  "sauce-champignons", "sauce-creme", "sauce-tomate", "sauce-speciale",
+  "sauce-truffe", "sauce-poivre", "sauce-fromagere",
+  "garn-saumon", "garn-poulet", "garn-poulet-eff", "garn-merguez", "garn-kebab",
+  "garn-hachee", "garn-jambon", "garn-lardons", "garn-boeuf-eff",
+  "viande-entrecote", "viande-poulet", "viande-magret", "viande-gigot",
+  "sv-verte", "sv-poivre", "salade", "tiramisu", "accompagnement",
+]);
+
+const photoDe = (id) => (id && PHOTOS.has(id) ? `assets/plats/${id}.webp` : null);
+
 /* ---------- CARDS DE LA SECTION CARTE ---------- */
 const MENU = [
   { id: "compose",  cat: "pates",   tag: "À composer", tagStyle: "hot",    name: "Plat à composer",
     desc: "Pâtes fraîches : ta sauce, ta garniture, tes suppléments. Sept sauces maison, neuf garnitures.",
-    price: PLAT_PRICE, customizable: true, popular: true },
+    price: PLAT_PRICE, customizable: true, popular: true, photo: "accompagnement" },
 
   ...VIANDES.map(v => ({
     id: "viande-" + v.id,

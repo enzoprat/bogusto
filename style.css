@@ -2391,3 +2391,124 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   letter-spacing: 2px;
   color: var(--c-orange);
 }
+
+/* ============================================
+   V11 — Photos des plats, pop-up « et avec ça ? », section desserts
+   ============================================ */
+
+/* ---- vignette dans les chips du builder et des modales ---- */
+.chip--photo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 6px;
+}
+.chip__img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: 0 0 auto;
+  background: var(--c-cream);
+}
+.chip--out .chip__img { filter: grayscale(1); opacity: 0.55; }
+
+/* ---- photo en tête de card ---- */
+.product__photo {
+  margin: -22px -22px 16px;
+  height: 150px;
+  overflow: hidden;
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: var(--c-cream-alt);
+}
+.product__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.45s ease;
+}
+.product:hover .product__photo img { transform: scale(1.05); }
+.product--out .product__photo img { filter: grayscale(0.85); opacity: 0.6; }
+
+/* ---- pop-up « et avec ça ? » ---- */
+.extras { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+.extra {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 10px 16px 10px 10px;
+  border: 2px solid var(--c-grey-light);
+  border-radius: 999px;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.extra:hover { border-color: var(--c-orange); transform: translateY(-2px); }
+.extra__img {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: 0 0 auto;
+  background: var(--c-cream-alt);
+}
+.extra__img--vide {
+  display: block;
+  background: var(--c-cream-alt) radial-gradient(circle at 50% 42%, var(--c-cream) 38%, transparent 39%);
+}
+.extra__txt { flex: 1; min-width: 0; }
+.extra__nom { display: block; font-weight: 700; font-size: 1rem; color: var(--c-deep); }
+.extra__detail { display: block; font-size: 0.8rem; color: var(--c-grey); margin-top: 2px; }
+.extra__prix {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--c-orange);
+  white-space: nowrap;
+}
+
+/* ---- section desserts ---- */
+.desserts { background: var(--c-cream-alt); padding: 80px 0; }
+.desserts__grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 50px;
+  align-items: center;
+}
+.desserts__visual { position: relative; }
+.desserts__visual img {
+  width: 100%;
+  border-radius: var(--radius-lg);
+  border: 4px solid #fff;
+  box-shadow: var(--shadow);
+}
+.desserts__prix {
+  position: absolute;
+  right: -14px;
+  bottom: -14px;
+  width: 86px; height: 86px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: var(--c-orange);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  box-shadow: 0 8px 22px rgba(160, 40, 40, 0.35);
+  transform: rotate(-8deg);
+}
+.desserts__parfums { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 28px; }
+.desserts__cta { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.desserts__note { font-size: 0.82rem; color: var(--c-grey); font-style: italic; }
+
+/* ---- champ non modifiable du formulaire ---- */
+.champ-fige {
+  background: var(--c-cream-alt) !important;
+  color: var(--c-grey) !important;
+  cursor: default;
+}
+
+@media (max-width: 860px) {
+  .desserts__grid { grid-template-columns: 1fr; gap: 34px; }
+  .desserts__visual { max-width: 380px; margin: 0 auto; }
+  .product__photo { height: 130px; }
+}

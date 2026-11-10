@@ -24,6 +24,7 @@
       <nav class="nav" id="nav">
         <a href="#hero" class="nav__link">Accueil</a>
         <a href="#menu" class="nav__link">Menu</a>
+        <a href="#desserts" class="nav__link">Desserts</a>
         <a href="#compose" class="nav__link">Compose</a>
         <a href="#livraison" class="nav__link">Adresse</a>
         <a href="#commander" class="nav__link">Commander</a>
@@ -309,6 +310,32 @@
     </div>
   </section>
 
+  <!-- ============ DESSERTS ============ -->
+  <section class="desserts" id="desserts">
+    <div class="container desserts__grid">
+      <div class="desserts__visual">
+        <img src="assets/plats/tiramisu.webp" alt="Tiramisu Bogusto" loading="lazy" />
+        <span class="desserts__prix">5€</span>
+      </div>
+
+      <div class="desserts__content">
+        <span class="eyebrow">Le dessert</span>
+        <h2 class="section-title">Tiramisu maison</h2>
+        <p class="section-lead">
+          Préparé sur place, à l'italienne. Quatre parfums, et on te le prépare
+          dans sa verrine, prêt à emporter avec ta commande.
+        </p>
+
+        <div class="desserts__parfums" id="dessertsParfums"></div>
+
+        <div class="desserts__cta">
+          <button class="btn btn--primary btn--large" id="dessertAdd">Ajouter un tiramisu — 5€</button>
+          <p class="desserts__note">Servi à part, comme les boissons.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ DELIVERY / ADDRESS ============ -->
   <section class="delivery" id="livraison">
     <div class="container delivery__grid">
@@ -326,7 +353,7 @@
           </li>
           <li><span>🕒</span> Du mercredi au dimanche · 19h00 – 00h00</li>
           <li><span>🌙</span> Service du soir uniquement</li>
-          <li><span>💳</span> Espèces, CB, tickets resto, Apple Pay, Google Pay</li>
+          <li><span>💳</span> Espèces, CB, Apple Pay, Google Pay</li>
         </ul>
 
         <div class="delivery__social">
@@ -405,13 +432,9 @@
           </div>
 
           <label>
-            <span>Mode de récupération *</span>
-            <select name="mode" required>
-              <option value="">Choisis...</option>
-              <option value="Manger sur place">🍽️ Manger sur place</option>
-              <option value="Click & Collect">📦 Click & Collect — à récupérer</option>
-              <option value="À emporter">🥡 À emporter</option>
-            </select>
+            <span>Mode de récupération</span>
+            <input type="text" value="📦 Click &amp; Collect — à récupérer sur place" readonly tabindex="-1" class="champ-fige" />
+            <input type="hidden" name="mode" value="Click &amp; Collect" />
           </label>
 
           <div class="orderform__row">
@@ -431,7 +454,6 @@
               <option value="">Choisis...</option>
               <option value="Espèces">Espèces sur place</option>
               <option value="CB">Carte bancaire</option>
-              <option value="Ticket resto">Ticket restaurant</option>
               <option value="Apple/Google Pay">Apple / Google Pay</option>
             </select>
           </label>

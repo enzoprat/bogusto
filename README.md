@@ -8,6 +8,7 @@ HTML / CSS / JS vanilla — pas de framework, prêt à déployer sur Vercel.
 - `index.html` — Toute la structure du site (hero, story, compose, menu, adresse, formulaire, footer)
 - `style.css` — Tous les styles. Variables CSS centralisées en haut du fichier (`:root`)
 - `carte.js` — **La carte** : sauces, garnitures, suppléments, viandes, desserts. Source unique, lue par le site et par le dash
+- `assets/plats/` — Photos des plats, découpées dans les deux flyers. Convention : `<id>.webp`, l'identifiant d'un élément suffit à retrouver sa photo
 - `script.js` — Panier, formulaire, modales, rendu de la carte
 - `dash/index.html` — Dash de gestion des stocks (mise en sommeil)
 - `api/` — Fonctions serverless Vercel (`dispo`, `login`)
@@ -113,8 +114,14 @@ Prix globaux : `PLAT_PRICE` (10€), `TIRAMISU_PRICE` (5€), `CANETTE_PRICE` (2
 
 **🥗 Et aussi**
 - Salade de Burrata 100g **10€**
-- Tiramisu **5€** (M&M's, Spéculos, Oreo, classique cacao)
-- Canette **2€**, servie à part
+- Tiramisu **5€** (M&M's, Spéculos, Oreo, classique cacao) — section dédiée sur le site
+- Canette **2€** · Bouteille d'eau **1€**, servies à part
+
+Après l'ajout d'un plat, un pop-up « Et avec ça ? » propose la canette, la
+bouteille d'eau et le tiramisu. Choisir le tiramisu rouvre la modale des parfums.
+
+**Commandes** : Click & Collect uniquement. Paiement sur place en espèces, carte
+ou Apple/Google Pay — plus de ticket restaurant.
 
 **Horaires** : du mercredi au dimanche, 19h00 – 00h00.
 

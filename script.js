@@ -27,10 +27,13 @@ const priceTag = (n) => (n > 0 ? ` <em>+${eur(n).replace(",00", "")}</em>` : "")
 function chipList(items, priceKey) {
   return items.map(i => {
     const ex = i[priceKey] || 0;
+    const img = photoDe(i.id);
+    const vignette = img ? `<img class="chip__img" src="${img}" alt="" loading="lazy" />` : "";
+    const classe = img ? "chip chip--photo" : "chip";
     if (estEnSommeil(i.id)) {
-      return `<button class="chip chip--out" disabled aria-disabled="true" title="Épuisé pour ce soir">${i.label} <em>épuisé</em></button>`;
+      return `<button class="${classe} chip--out" disabled aria-disabled="true" title="Épuisé pour ce soir">${vignette}<span>${i.label} <em>épuisé</em></span></button>`;
     }
-    return `<button class="chip" data-value="${i.val}" data-val="${i.val}" data-extra="${ex}">${i.label}${priceTag(ex)}</button>`;
+    return `<button class="${classe}" data-value="${i.val}" data-val="${i.val}" data-extra="${ex}">${vignette}<span>${i.label}${priceTag(ex)}</span></button>`;
   }).join("");
 }
 
@@ -123,6 +126,8 @@ function renderMenu(filter = "all") {
     card.className = "product reveal" + (out ? " product--out" : "");
     card.dataset.cat = prod.cat;
 
+    const img = photoDe(prod.photo || prod.id);
+    const photoHtml = img ? `<div class="product__photo"><img src="${img}" alt="${prod.name}" loading="lazy" /></div>` : "";
     const priceHtml = `<div class="product__price">${eur(prod.price)}${prod.customizable && !out ? '<small>personnalisable</small>' : ''}</div>`;
     const tagClass = out ? "product__tag product__tag--out" : `product__tag product__tag--${prod.tagStyle || 'yellow'}`;
     const tagText = out ? "Épuisé" : prod.tag;
@@ -132,6 +137,7 @@ function renderMenu(filter = "all") {
       : `<button class="product__add" data-id="${prod.id}">Ajouter</button>`;
 
     card.innerHTML = `
+      ${photoHtml}
       <div class="product__head">
         <div class="product__picto" aria-hidden="true">${picto}</div>
         <span class="${tagClass}">${tagText}</span>
@@ -285,14 +291,34 @@ function tiramisuModal(prod) {
   `;
 }
 
-/* ---------- POPUP CANETTE (proposée après un plat) ---------- */
+/* ---------- POPUP « ET AVEC ÇA ? » (proposé après un plat) ---------- */
+const EXTRAS_POPUP = [
+  { id: "canette",  nom: "Canette 33cl",     detail: "Bien fraîche",            prix: CANETTE_PRICE },
+  { id: "eau",      nom: "Bouteille d'eau",  detail: "",                        prix: EAU_PRICE },
+  { id: "tiramisu", nom: "Tiramisu",         detail: "Parfum au choix",         prix: TIRAMISU_PRICE },
+];
+
 function drinkPopupModal(forProduct) {
   return `
-    <h3>Et avec ça, une canette ?</h3>
-    <p class="modal__desc">Ton plat <strong>${forProduct}</strong> est dans le panier. La canette est servie à part : ${eur(CANETTE_PRICE)}.</p>
+    <h3>Et avec ça ?</h3>
+    <p class="modal__desc">Ton plat <strong>${forProduct}</strong> est dans le panier. Boissons et desserts sont servis à part.</p>
 
-    <button class="btn btn--primary btn--full" id="confirmDrinkPopup">Ajouter une canette — ${eur(CANETTE_PRICE)}</button>
-    <button class="btn btn--ghost btn--full" id="skipDrinkPopup" style="margin-top:10px;">Continuer sans boisson</button>
+    <div class="extras">
+      ${EXTRAS_POPUP.map(e => {
+        const img = photoDe(e.id);
+        return `
+        <button class="extra" data-extra-id="${e.id}" data-nom="${e.nom}" data-prix="${e.prix}">
+          ${img ? `<img class="extra__img" src="${img}" alt="" loading="lazy" />` : '<span class="extra__img extra__img--vide" aria-hidden="true"></span>'}
+          <span class="extra__txt">
+            <span class="extra__nom">${e.nom}</span>
+            ${e.detail ? `<span class="extra__detail">${e.detail}</span>` : ""}
+          </span>
+          <span class="extra__prix">${eur(e.prix)}</span>
+        </button>`;
+      }).join("")}
+    </div>
+
+    <button class="btn btn--ghost btn--full" id="skipDrinkPopup" style="margin-top:14px;">Non merci, continuer</button>
   `;
 }
 
@@ -406,16 +432,23 @@ document.addEventListener("click", (e) => {
     closeModal();
   }
 
-  // CONFIRM CANETTE (popup après un plat)
-  if (e.target.id === "confirmDrinkPopup") {
+  // AJOUT D'UN EXTRA depuis le pop-up
+  const extraBtn = e.target.closest("[data-extra-id]");
+  if (extraBtn) {
+    const id = extraBtn.dataset.extraId;
+    closeModal();
+    // le tiramisu a des parfums : on repasse par sa modale
+    if (id === "tiramisu") {
+      const prod = MENU.find(m => m.id === "tiramisu");
+      if (prod) { setTimeout(() => openModal(tiramisuModal(prod)), 200); return; }
+    }
     addToCart({
-      productId: "canette",
-      name: "Canette",
+      productId: id,
+      name: extraBtn.dataset.nom,
       meta: "Avec un plat",
       qty: 1,
-      unitPrice: CANETTE_PRICE,
+      unitPrice: parseFloat(extraBtn.dataset.prix),
     });
-    closeModal();
   }
   if (e.target.id === "skipDrinkPopup") {
     closeModal();
@@ -578,6 +611,44 @@ function initCompose() {
   });
 
   updateLivePrice();
+}
+
+/* ---------- SECTION DESSERTS ---------- */
+function initDesserts() {
+  const zone = $("#dessertsParfums");
+  const bouton = $("#dessertAdd");
+  if (!zone || !bouton) return;
+
+  const prod = MENU.find(m => m.id === "tiramisu");
+  const epuise = estEnSommeil("tiramisu");
+
+  zone.innerHTML = TIRAMISU_PARFUMS
+    .map((p, i) => `<button class="chip${i === 0 ? " is-active" : ""}" data-parfum="${p}"${epuise ? " disabled" : ""}>${p}</button>`)
+    .join("");
+
+  if (epuise) {
+    bouton.disabled = true;
+    bouton.textContent = "Épuisé pour ce soir";
+    return;
+  }
+
+  zone.addEventListener("click", (e) => {
+    const chip = e.target.closest("[data-parfum]");
+    if (!chip) return;
+    $$("#dessertsParfums .chip").forEach(c => c.classList.remove("is-active"));
+    chip.classList.add("is-active");
+  });
+
+  bouton.addEventListener("click", () => {
+    const choisi = $("#dessertsParfums .chip.is-active");
+    addToCart({
+      productId: "tiramisu",
+      name: "Tiramisu",
+      meta: choisi ? choisi.dataset.parfum : TIRAMISU_PARFUMS[0],
+      qty: 1,
+      unitPrice: prod ? prod.price : TIRAMISU_PRICE,
+    });
+  });
 }
 
 /* ---------- FEATURED COUP DE CŒUR ---------- */
@@ -812,6 +883,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderMenu();
   renderCart();
   initCompose();
+  initDesserts();
   initFilters();
   initForm();
   initBurger();
