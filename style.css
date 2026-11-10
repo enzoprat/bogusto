@@ -2326,3 +2326,51 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   background: rgba(255, 255, 255, 0.5);
 }
 #mPastaSauceWrap .acc__hint { margin: 0 0 10px; font-style: normal; font-weight: 600; }
+
+/* ============================================
+   V10 — Ruptures de stock (mise en sommeil depuis /dash)
+   ============================================ */
+
+/* Chip d'un ingrédient épuisé : visible mais clairement hors service */
+.chip--out {
+  background: transparent;
+  border: 2px dashed var(--c-grey-light);
+  color: var(--c-grey);
+  opacity: 0.65;
+  cursor: not-allowed;
+  text-decoration: line-through;
+  text-decoration-color: rgba(110, 74, 44, 0.5);
+}
+.chip--out:hover { transform: none; border-color: var(--c-grey-light); }
+.chip--out em {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 0.74em;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--c-orange);
+  margin-left: 6px;
+}
+
+/* Card d'un plat épuisé */
+.product--out { opacity: 0.72; }
+.product--out:hover { transform: none; box-shadow: var(--shadow-sm); }
+.product--out .product__name { text-decoration: line-through; color: var(--c-grey); }
+.product--out .product__price { color: var(--c-grey); }
+.product--out .product__picto { opacity: 0.5; }
+
+.product__tag--out {
+  background: var(--c-grey-light);
+  color: var(--c-grey);
+  border-color: var(--c-grey-light);
+}
+
+.product__add--out {
+  background: var(--c-grey-light);
+  color: var(--c-grey);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.product__add--out::before { content: none; }
+.product__add--out:hover { background: var(--c-grey-light); transform: none; }

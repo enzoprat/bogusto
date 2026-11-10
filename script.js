@@ -3,109 +3,23 @@
    Cart + Menu + Form
    ============================================ */
 
-/* ---------- CARTE BOGUSTO — 2 menus ----------
-   1) MENU PÂTES FRAÎCHES — plat à composer 10€ (sauce + garniture)
-   2) MENU VIANDE — 15€ / 20€ (viande + accompagnement + sauce)
-   Toute la carte se modifie ici ; le reste du site s'adapte tout seul. */
+/* ---------- RUPTURES DE STOCK ----------
+   Le gérant met des éléments « en sommeil » depuis /dash.
+   Le site lit /api/dispo au chargement ; en cas de pépin, tout reste
+   disponible — on ne bloque jamais une commande à cause de l'API. */
+let SOMMEIL = new Set();
+const estEnSommeil = (id) => Boolean(id) && SOMMEIL.has(id);
 
-const PLAT_PRICE     = 10;   // plat à composer (pâtes fraîches)
-const TIRAMISU_PRICE = 5;    // tiramisu, parfum au choix
-const CANETTE_PRICE  = 2;    // canette, à part
-const SAUCE_SUP_PRICE = 0.5; // supplément sauce (menu viande)
-
-/* ===== MENU PÂTES FRAÎCHES ===== */
-
-/* 1 — LES SAUCES (une seule au choix) */
-const SAUCES = [
-  { val: "Crème de champignons", label: "Crème de champignons",         extra: 0 },
-  { val: "Base crème classique", label: "Base crème classique",         extra: 0 },
-  { val: "Base tomate",          label: "Base tomate",                  extra: 0 },
-  { val: "La Spéciale",          label: "La Spéciale · crème + tomate", extra: 0 },
-  { val: "Crème de truffe",      label: "Crème de truffe",              extra: 4 },
-  { val: "L'Italiana",           label: "L'Italiana",                   extra: 0 },
-];
-
-/* 2 — LES GARNITURES
-   first = supplément sur la garniture comprise dans le plat
-   extra = prix d'une garniture supplémentaire */
-const GARNITURES = [
-  { val: "Saumon fumé",         label: "Saumon fumé",         first: 1, extra: 3 },
-  { val: "Poulet",              label: "Poulet",              first: 0, extra: 2 },
-  { val: "Poulet effiloché",    label: "Poulet effiloché",    first: 0, extra: 2 },
-  { val: "Légumes",             label: "Légumes",             first: 0, extra: 2 },
-  { val: "Kebab",               label: "Kebab",               first: 1, extra: 2 },
-  { val: "Viande hachée",       label: "Viande hachée",       first: 0, extra: 2 },
-  { val: "Lardons de volaille", label: "Lardons de volaille", first: 0, extra: 2 },
-  { val: "Bœuf effiloché",      label: "Bœuf effiloché",      first: 1, extra: 3 },
-];
-
-/* 3 — LES SUPPLÉMENTS */
-const SUPPLEMENTS = [
-  { val: "Burrata 50g",  label: "Burrata 50g",  extra: 3 },
-  { val: "Burrata 100g", label: "Burrata 100g", extra: 5 },
-];
-
-/* ===== MENU VIANDE ===== */
-
-/* Les viandes (chaque plat = viande + 1 accompagnement + 1 sauce) */
-const VIANDES = [
-  { id: "ailes",       name: "Ailes de poulet x4",      desc: "",                       price: 15 },
-  { id: "brochettes",  name: "Brochettes de poulet x3", desc: "",                       price: 15 },
-  { id: "magret",      name: "Magret entier",           desc: "",                       price: 20 },
-  { id: "faux-filet",  name: "Faux-filet",              desc: "",                       price: 20 },
-  { id: "gigot",       name: "Gigot d'agneau",          desc: "",                       price: 20 },
-  { id: "assiette",    name: "Assiette Bog",            desc: "brochettes x2 + 2 ailes", price: 20 },
-];
-
-/* Un accompagnement au choix */
-const ACCOMPAGNEMENTS = [
-  { val: "Riz sauce yassa",     label: "Riz sauce yassa",     extra: 0 },
-  { val: "Riz sauce mafé",      label: "Riz sauce mafé",      extra: 0 },
-  { val: "Riz haricots rouges", label: "Riz haricots rouges", extra: 0 },
-  { val: "Pâtes fraîches",      label: "Pâtes fraîches · sauce au choix", extra: 0, needsSauce: true },
-];
-
-/* Une sauce au choix (supplément sauce : +0,50€) */
-const SAUCES_VIANDE = [
-  { val: "Sauce verte", label: "Sauce verte", extra: 0 },
-  { val: "Poivre",      label: "Poivre",      extra: 0 },
-];
-
-/* Suppléments du menu viande */
-const SUPPLEMENTS_VIANDE = [
-  { val: "Brochettes x2", label: "Brochettes x2", extra: 5 },
-];
-
-/* ===== DESSERTS ===== */
-const TIRAMISU_PARFUMS = ["M&M's", "Spéculos", "Oreo", "Classique cacao"];
-
-/* ---------- CARDS DE LA SECTION CARTE ---------- */
-const MENU = [
-  { id: "compose",  cat: "pates",   tag: "À composer", tagStyle: "hot",    name: "Plat à composer",
-    desc: "Pâtes fraîches : ta sauce, ta garniture, tes suppléments. Six sauces maison, huit garnitures.",
-    price: PLAT_PRICE, customizable: true, popular: true },
-
-  ...VIANDES.map(v => ({
-    id: "viande-" + v.id,
-    cat: "viande",
-    tag: v.price === 15 ? "Poulet" : "Signature",
-    tagStyle: v.price === 15 ? "green" : "maison",
-    name: v.name,
-    desc: (v.desc ? v.desc.charAt(0).toUpperCase() + v.desc.slice(1) + ". " : "") +
-          "Servi avec un accompagnement et une sauce au choix.",
-    price: v.price,
-    customizable: true,
-    viandeId: v.id,
-  })),
-
-  { id: "tiramisu", cat: "dessert", tag: "Maison",     tagStyle: "maison", name: "Tiramisu",
-    desc: "Préparé sur place, parfum au choix : M&M's, Spéculos, Oreo ou classique cacao.",
-    price: TIRAMISU_PRICE },
-
-  { id: "canette",  cat: "boisson", tag: "33cl",       tagStyle: "yellow", name: "Canette",
-    desc: "Bien fraîche, servie à part.",
-    price: CANETTE_PRICE },
-];
+async function loadDispo() {
+  try {
+    const res = await fetch("/api/dispo", { headers: { Accept: "application/json" } });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (Array.isArray(data.sommeil)) SOMMEIL = new Set(data.sommeil);
+  } catch (e) {
+    /* hors ligne ou API absente : on laisse tout disponible */
+  }
+}
 
 /* ---------- RENDU DES CHIPS ---------- */
 const priceTag = (n) => (n > 0 ? ` <em>+${eur(n).replace(",00", "")}</em>` : "");
@@ -114,6 +28,9 @@ function chipList(items, priceKey) {
   return items.map(i => {
     const ex = i[priceKey] || 0;
     const flag = i.needsSauce ? ' data-needs-sauce="1"' : "";
+    if (estEnSommeil(i.id)) {
+      return `<button class="chip chip--out" disabled aria-disabled="true" title="Épuisé pour ce soir">${i.label} <em>épuisé</em></button>`;
+    }
     return `<button class="chip" data-value="${i.val}" data-val="${i.val}" data-extra="${ex}"${flag}>${i.label}${priceTag(ex)}</button>`;
   }).join("");
 }
@@ -201,24 +118,29 @@ function renderMenu(filter = "all") {
   const items = filter === "all" ? MENU : MENU.filter(m => m.cat === filter);
 
   items.forEach(prod => {
+    const out = estEnSommeil(prod.id);
     const card = document.createElement("article");
-    card.className = "product reveal";
+    card.className = "product reveal" + (out ? " product--out" : "");
     card.dataset.cat = prod.cat;
 
-    const priceHtml = `<div class="product__price">${eur(prod.price)}${prod.customizable ? '<small>personnalisable</small>' : ''}</div>`;
-    const tagClass = `product__tag product__tag--${prod.tagStyle || 'yellow'}`;
+    const priceHtml = `<div class="product__price">${eur(prod.price)}${prod.customizable && !out ? '<small>personnalisable</small>' : ''}</div>`;
+    const tagClass = out ? "product__tag product__tag--out" : `product__tag product__tag--${prod.tagStyle || 'yellow'}`;
+    const tagText = out ? "Épuisé" : prod.tag;
     const picto = CAT_ICON[prod.cat] || '';
+    const bouton = out
+      ? '<button class="product__add product__add--out" disabled aria-disabled="true">Épuisé</button>'
+      : `<button class="product__add" data-id="${prod.id}">Ajouter</button>`;
 
     card.innerHTML = `
       <div class="product__head">
         <div class="product__picto" aria-hidden="true">${picto}</div>
-        <span class="${tagClass}">${prod.tag}</span>
+        <span class="${tagClass}">${tagText}</span>
       </div>
       <h3 class="product__name">${prod.name}</h3>
       <p class="product__desc">${prod.desc}</p>
       <div class="product__footer">
         ${priceHtml}
-        <button class="product__add" data-id="${prod.id}">Ajouter</button>
+        ${bouton}
       </div>
     `;
     grid.appendChild(card);
@@ -906,8 +828,9 @@ function bumpStickyCTA() {
 }
 
 /* ---------- INIT ---------- */
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   loadCart();
+  await loadDispo();
   renderMenu();
   renderCart();
   initCompose();

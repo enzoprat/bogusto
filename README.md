@@ -7,8 +7,45 @@ HTML / CSS / JS vanilla — pas de framework, prêt à déployer sur Vercel.
 
 - `index.html` — Toute la structure du site (hero, story, compose, menu, adresse, formulaire, footer)
 - `style.css` — Tous les styles. Variables CSS centralisées en haut du fichier (`:root`)
-- `script.js` — Carte, panier, formulaire, modales
+- `carte.js` — **La carte** : sauces, garnitures, suppléments, viandes, desserts. Source unique, lue par le site et par le dash
+- `script.js` — Panier, formulaire, modales, rendu de la carte
+- `dash/index.html` — Dash de gestion des stocks (mise en sommeil)
+- `api/` — Fonctions serverless Vercel (`dispo`, `login`)
 - `DESIGN.md` — Spécification complète du design system
+
+## Gestion des stocks (`/dash`)
+
+Le gérant se connecte sur `/dash` et met en sommeil ce qui est en rupture : les
+9 plats, les 6 sauces, les 8 garnitures et les 2 burratas. Côté client, l'élément
+s'affiche « épuisé », barré, et n'est plus commandable.
+
+### Mise en service (2 étapes, une seule fois)
+
+1. **Stockage** — dans le projet Vercel, onglet *Storage* → *Marketplace* →
+   installer une base **Redis (Upstash)**. L'intégration injecte automatiquement
+   `UPSTASH_REDIS_REST_URL` et `UPSTASH_REDIS_REST_TOKEN` dans le projet.
+2. **Mot de passe** — *Settings* → *Environment Variables* → ajouter
+   `DASH_PASSWORD` avec le mot de passe du gérant.
+
+Puis redéployer. Tant que ces variables n'existent pas, le site fonctionne
+normalement (tout est disponible) et le dash affiche un avertissement.
+
+### Comment ça marche
+
+| Route | Rôle |
+|---|---|
+| `GET /api/dispo` | Liste publique des identifiants en sommeil. Ne renvoie jamais d'erreur bloquante : en cas de pépin, la liste est vide et tout reste commandable. |
+| `POST /api/dispo` | Met à jour la liste. Exige le cookie de session du dash. |
+| `GET /api/login` | État de la session. |
+| `POST /api/login` | Vérifie `DASH_PASSWORD` et pose un cookie `HttpOnly` de 12 h. |
+
+Les identifiants (`sauce-truffe`, `garn-saumon`, `supp-burrata-100`…) sont définis
+dans `carte.js`. **Ne pas les renommer** : ce sont les clés enregistrées côté Redis.
+Ajouter un plat ou une garniture, en revanche, suffit — il apparaît tout seul dans
+le dash.
+
+La disponibilité est mise en cache 10 s côté CDN : compte jusqu'à une minute pour
+qu'une mise en sommeil touche tous les visiteurs.
 
 ## Configuration Web3Forms
 

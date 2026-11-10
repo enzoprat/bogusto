@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Bogusto — Gestion des stocks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --c-night: #6b1f1f; --c-deep: #3a2818; --c-cream: #f5e8c8; --c-cream-alt: #ecdcae;
+      --c-orange: #a02828; --c-yellow: #d4a84b; --c-grey: #6e4a2c; --c-line: #e2cfa3;
+      --c-out: #8a8a8a;
+      --font-display: "Bowlby One", sans-serif;
+      --font-body: "Poppins", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-body); color: var(--c-deep); background: var(--c-cream);
+      -webkit-font-smoothing: antialiased; padding-bottom: 60px;
+    }
+    .wrap { max-width: 640px; margin: 0 auto; padding: 20px 16px; }
+
+    header.top {
+      background: var(--c-night); color: var(--c-cream);
+      padding: 18px 16px; position: sticky; top: 0; z-index: 10;
+      box-shadow: 0 4px 18px rgba(0,0,0,.18);
+    }
+    .top__in { max-width: 640px; margin: 0 auto; display: flex; align-items: center; gap: 12px; }
+    .top h1 { font-family: var(--font-display); font-size: 1.15rem; letter-spacing: 1px; flex: 1; }
+    .top h1 small { display: block; font-family: var(--font-body); font-weight: 500; font-size: .72rem; color: var(--c-yellow); letter-spacing: .5px; margin-top: 3px; }
+
+    .btn {
+      font-family: var(--font-body); font-weight: 700; font-size: .92rem;
+      border: 0; border-radius: 999px; padding: 12px 22px; cursor: pointer;
+      background: var(--c-orange); color: #fff; box-shadow: 0 4px 0 #6b1f1f;
+    }
+    .btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #6b1f1f; }
+    .btn--ghost { background: transparent; color: var(--c-cream); border: 2px solid rgba(245,232,200,.45); box-shadow: none; padding: 9px 16px; font-size: .8rem; }
+    .btn--full { width: 100%; }
+
+    .card { background: #fff; border: 2px solid var(--c-line); border-radius: 16px; padding: 18px; margin-bottom: 16px; }
+
+    /* ---- connexion ---- */
+    #login { max-width: 400px; margin: 60px auto; }
+    #login h2 { font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 6px; color: var(--c-orange); }
+    #login p { font-size: .88rem; color: var(--c-grey); margin-bottom: 18px; }
+    input[type=password] {
+      width: 100%; padding: 14px 16px; font-family: var(--font-body); font-size: 1rem;
+      border: 2px solid var(--c-line); border-radius: 10px; margin-bottom: 14px; background: #fff;
+    }
+    input[type=password]:focus { outline: 0; border-color: var(--c-orange); }
+
+    /* ---- bandeau d'état ---- */
+    .state {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      background: var(--c-cream-alt); border: 2px dashed var(--c-orange);
+      border-radius: 14px; padding: 14px 16px; margin-bottom: 18px; font-size: .9rem; font-weight: 600;
+    }
+    .state--ok { border-color: #6e8c3a; border-style: solid; background: #eef3e2; }
+    .state__n { font-family: var(--font-display); font-size: 1.5rem; color: var(--c-orange); line-height: 1; }
+
+    /* ---- groupes ---- */
+    .group__title {
+      font-family: var(--font-display); font-size: .95rem; letter-spacing: 1px;
+      color: var(--c-orange); margin: 26px 0 10px; display: flex; align-items: center; gap: 10px;
+    }
+    .group__title span { flex: 1; height: 2px; background: var(--c-line); }
+
+    .item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 4px; border-bottom: 2px dashed var(--c-line);
+    }
+    .item:last-child { border-bottom: 0; }
+    .item__txt { flex: 1; min-width: 0; }
+    .item__name { font-weight: 600; font-size: .98rem; }
+    .item__meta { font-size: .76rem; color: var(--c-grey); margin-top: 2px; }
+    .item.is-out .item__name { color: var(--c-out); text-decoration: line-through; }
+
+    /* ---- interrupteur ---- */
+    .sw {
+      flex: 0 0 auto; width: 76px; height: 40px; border-radius: 999px; border: 0;
+      background: #6e8c3a; position: relative; cursor: pointer; transition: background .18s;
+    }
+    .sw::after {
+      content: ""; position: absolute; top: 4px; left: 4px; width: 32px; height: 32px;
+      border-radius: 50%; background: #fff; transition: transform .18s;
+      box-shadow: 0 2px 5px rgba(0,0,0,.3);
+    }
+    .sw[aria-pressed="true"] { background: var(--c-out); }
+    .sw[aria-pressed="true"]::after { transform: translateX(36px); }
+    .sw:disabled { opacity: .5; cursor: wait; }
+
+    .toast {
+      position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%) translateY(90px);
+      background: var(--c-deep); color: var(--c-cream); padding: 13px 24px; border-radius: 999px;
+      font-size: .88rem; font-weight: 600; transition: transform .25s; z-index: 50; max-width: 92vw; text-align: center;
+    }
+    .toast.is-on { transform: translateX(-50%) translateY(0); }
+    .toast.is-err { background: var(--c-orange); }
+
+    .note { font-size: .8rem; color: var(--c-grey); line-height: 1.5; margin-top: 10px; }
+    .warn { background: #fdf3e0; border: 2px solid var(--c-yellow); border-radius: 14px; padding: 14px 16px; font-size: .86rem; line-height: 1.5; margin-bottom: 18px; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <header class="top" id="top" hidden>
+    <div class="top__in">
+      <h1>BOGUSTO <small>Gestion des stocks</small></h1>
+      <button class="btn btn--ghost" id="logout">Déconnexion</button>
+    </div>
+  </header>
+
+  <!-- ============ CONNEXION ============ -->
+  <section class="wrap" id="login" hidden>
+    <div class="card">
+      <h2>Gestion des stocks</h2>
+      <p>Entre le mot de passe pour mettre des plats ou des ingrédients en sommeil.</p>
+      <form id="loginForm">
+        <input type="password" id="pw" placeholder="Mot de passe" autocomplete="current-password" required />
+        <button class="btn btn--full" type="submit">Se connecter</button>
+      </form>
+      <p class="note" id="loginNote"></p>
+    </div>
+  </section>
+
+  <!-- ============ DASH ============ -->
+  <main class="wrap" id="dash" hidden>
+    <div class="warn" id="storeWarn" hidden></div>
+
+    <div class="state" id="state">
+      <span class="state__n" id="stateN">0</span>
+      <span id="stateTxt">élément en sommeil</span>
+      <button class="btn" id="resetAll" style="margin-left:auto;padding:9px 16px;font-size:.8rem" hidden>Tout réactiver</button>
+    </div>
+
+    <div id="groups"></div>
+
+    <p class="note">
+      Un élément en sommeil s'affiche « épuisé » sur la carte et n'est plus commandable.
+      Compte jusqu'à une minute pour que le changement se propage à tous les visiteurs
+      (le site met la disponibilité en cache quelques secondes).
+    </p>
+  </main>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="/carte.js"></script>
+  <script>
+  (function () {
+    const $ = (s) => document.querySelector(s);
+
+    /* Ce que le gérant peut mettre en sommeil : les plats de la carte,
+       les sauces, les garnitures et les suppléments burrata. */
+    const GROUPES = [
+      { titre: "Les plats",       items: MENU.map(m => ({ id: m.id, nom: m.name, meta: eurTxt(m.price) })) },
+      { titre: "Les sauces",      items: SAUCES.map(s => ({ id: s.id, nom: s.val, meta: s.extra ? "+" + s.extra + "€" : "comprise" })) },
+      { titre: "Les garnitures",  items: GARNITURES.map(g => ({ id: g.id, nom: g.val, meta: g.first ? "+" + g.first + "€ · en + " + g.extra + "€" : "comprise · en + " + g.extra + "€" })) },
+      { titre: "Les suppléments", items: SUPPLEMENTS.map(s => ({ id: s.id, nom: s.val, meta: s.extra + "€" })) },
+    ];
+
+    function eurTxt(n) { return String(n).replace(".", ",") + "€"; }
+
+    let sommeil = new Set();
+
+    /* ---------- toast ---------- */
+    let tTimer = null;
+    function toast(msg, err) {
+      const t = $("#toast");
+      t.textContent = msg;
+      t.classList.toggle("is-err", Boolean(err));
+      t.classList.add("is-on");
+      clearTimeout(tTimer);
+      tTimer = setTimeout(() => t.classList.remove("is-on"), 2600);
+    }
+
+    /* ---------- rendu ---------- */
+    function renderState() {
+      const n = sommeil.size;
+      $("#stateN").textContent = n;
+      $("#stateTxt").textContent = n === 0
+        ? "tout est disponible ce soir"
+        : (n === 1 ? "élément en sommeil" : "éléments en sommeil");
+      $("#state").classList.toggle("state--ok", n === 0);
+      $("#resetAll").hidden = n === 0;
+    }
+
+    function render() {
+      const root = $("#groups");
+      root.innerHTML = GROUPES.map(g => `
+        <h2 class="group__title">${g.titre}<span></span></h2>
+        <div class="card">
+          ${g.items.map(it => {
+            const out = sommeil.has(it.id);
+            return `
+              <div class="item${out ? " is-out" : ""}" data-row="${it.id}">
+                <div class="item__txt">
+                  <div class="item__name">${it.nom}</div>
+                  <div class="item__meta">${out ? "Épuisé — plus commandable" : "En vente · " + it.meta}</div>
+                </div>
+                <button class="sw" data-id="${it.id}" aria-pressed="${out}"
+                        aria-label="${out ? "Réactiver" : "Mettre en sommeil"} ${it.nom}"></button>
+              </div>`;
+          }).join("")}
+        </div>
+      `).join("");
+      renderState();
+    }
+
+    /* ---------- API ---------- */
+    async function api(path, opts) {
+      const res = await fetch(path, Object.assign({ headers: { "Content-Type": "application/json" } }, opts));
+      let data = {};
+      try { data = await res.json(); } catch (e) {}
+      if (!res.ok) throw new Error(data.error || "Erreur " + res.status);
+      return data;
+    }
+
+    async function toggle(id, btn) {
+      const vers = !sommeil.has(id);
+      btn.disabled = true;
+      try {
+        const data = await api("/api/dispo", {
+          method: "POST",
+          body: JSON.stringify({ id: id, asleep: vers }),
+        });
+        sommeil = new Set(data.sommeil || []);
+        render();
+        toast(vers ? "Mis en sommeil ✓" : "Remis en vente ✓");
+      } catch (e) {
+        btn.disabled = false;
+        if (/session/i.test(e.message)) return showLogin(e.message);
+        toast(e.message, true);
+      }
+    }
+
+    async function resetAll() {
+      if (!confirm("Tout remettre en vente ?")) return;
+      try {
+        const data = await api("/api/dispo", { method: "POST", body: JSON.stringify({ sommeil: [] }) });
+        sommeil = new Set(data.sommeil || []);
+        render();
+        toast("Toute la carte est de nouveau disponible ✓");
+      } catch (e) { toast(e.message, true); }
+    }
+
+    /* ---------- écrans ---------- */
+    function showLogin(msg) {
+      $("#top").hidden = true;
+      $("#dash").hidden = true;
+      $("#login").hidden = false;
+      $("#loginNote").textContent = msg || "";
+      $("#pw").focus();
+    }
+
+    async function showDash() {
+      $("#login").hidden = true;
+      $("#top").hidden = false;
+      $("#dash").hidden = false;
+      try {
+        const data = await api("/api/dispo");
+        sommeil = new Set(data.sommeil || []);
+        $("#storeWarn").hidden = data.configured !== false;
+        if (data.configured === false) {
+          $("#storeWarn").innerHTML = "<strong>Stockage non configuré.</strong> Ajoute l'intégration Redis " +
+            "(Upstash) au projet sur Vercel : sans elle, les mises en sommeil ne sont pas enregistrées.";
+        }
+      } catch (e) { toast(e.message, true); }
+      render();
+    }
+
+    /* ---------- démarrage ---------- */
+    document.addEventListener("click", (e) => {
+      const sw = e.target.closest(".sw");
+      if (sw) return toggle(sw.dataset.id, sw);
+      if (e.target.id === "resetAll") return resetAll();
+      if (e.target.id === "logout") {
+        api("/api/login?logout=1", { method: "POST" }).finally(() => showLogin("À bientôt."));
+      }
+    });
+
+    $("#loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = e.target.querySelector("button");
+      btn.disabled = true;
+      try {
+        await api("/api/login", { method: "POST", body: JSON.stringify({ motdepasse: $("#pw").value }) });
+        $("#pw").value = "";
+        await showDash();
+      } catch (err) {
+        $("#loginNote").textContent = err.message;
+      } finally { btn.disabled = false; }
+    });
+
+    (async function init() {
+      try {
+        const s = await api("/api/login");
+        if (s.configured === false) {
+          return showLogin("DASH_PASSWORD n'est pas défini dans les variables d'environnement Vercel.");
+        }
+        if (s.connecte) return showDash();
+      } catch (e) { /* API absente : on montre quand même la connexion */ }
+      showLogin();
+    })();
+  })();
+  </script>
+</body>
+</html>
