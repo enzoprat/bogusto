@@ -24,11 +24,19 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      # packages vide : l'action installe sinon un paquet "tools" qui
+      # n'existe plus dans le SDK moderne, et echoue dessus. On ne garde
+      # que l'acceptation des licences ; le SDK du runner fait le reste.
       - name: SDK Android
         uses: android-actions/setup-android@v3
+        with:
+          packages: ''
 
+      # Version figee : AGP 8.5 exige Gradle 8.7 ou plus.
       - name: Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
 
       - name: Compilation
         working-directory: android
