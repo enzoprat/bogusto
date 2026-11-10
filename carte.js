@@ -57,7 +57,7 @@ const SUPPLEMENTS = [
    et une sauce d'accompagnement. */
 const VIANDES = [
   { id: "entrecote", name: "Entrecôte Black Angus 300g",      desc: "",             price: 25 },
-  { id: "poulet",    name: "Haut de cuisse de poulet sans os", desc: "",            price: 15 },
+  { id: "poulet",    name: "Cuisse de poulet sans os",         desc: "",            price: 15 },
   { id: "magret",    name: "Magret entier",                   desc: "",             price: 20 },
   { id: "gigot",     name: "Gigot d'agneau",                  desc: "en tranches",  price: 20 },
 ];

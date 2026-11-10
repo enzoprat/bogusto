@@ -87,7 +87,7 @@ Prix globaux : `PLAT_PRICE` (10€), `TIRAMISU_PRICE` (5€), `CANETTE_PRICE` (2
 - Suppléments : stracciatella **3€** · burrata 100g **5€** · version XXL **5€**
 
 **🔥 Menu viandes** (pâtes fraîches fusili + 1 sauce comprises)
-- Haut de cuisse de poulet sans os — **15€**
+- Cuisse de poulet sans os — **15€**
 - Magret entier · Gigot d'agneau en tranches — **20€**
 - Entrecôte Black Angus 300g — **25€**
 - Accompagnement unique : pâtes fraîches fusili, avec une des 7 sauces du menu pâtes
