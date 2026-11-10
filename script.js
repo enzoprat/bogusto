@@ -892,7 +892,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   $("#year").textContent = new Date().getFullYear();
 
-  $$(".story-card, .delivery__steps, .menu__head, .compose__head, .order__head, .builder").forEach(el => {
+  $$(".delivery__steps, .menu__head, .compose__head, .order__head, .builder").forEach(el => {
     el.classList.add("reveal");
   });
   observeReveal();
