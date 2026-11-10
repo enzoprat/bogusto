@@ -16,7 +16,7 @@ HTML / CSS / JS vanilla — pas de framework, prêt à déployer sur Vercel.
 ## Gestion des stocks (`/dash`)
 
 Le gérant se connecte sur `/dash` et met en sommeil ce qui est en rupture : les
-9 plats, les 6 sauces, les 8 garnitures et les 2 burratas. Côté client, l'élément
+8 plats, les 7 sauces, les 9 garnitures et les 3 suppléments. Côté client, l'élément
 s'affiche « épuisé », barré, et n'est plus commandable.
 
 ### Mise en service (2 étapes, une seule fois)
@@ -67,13 +67,12 @@ celles des modales sont générées à partir de ces tableaux — on ne touche p
 
 | Tableau | Rôle |
 |---|---|
-| `SAUCES` | Les 6 sauces du menu pâtes. `extra` = supplément (crème de truffe : 4€) |
-| `GARNITURES` | Les 8 garnitures. `first` = supplément sur la garniture comprise · `extra` = prix d'une garniture en plus |
-| `SUPPLEMENTS` | Burrata 50g / 100g |
-| `VIANDES` | Les 6 plats du menu viande et leur prix |
-| `ACCOMPAGNEMENTS` | Riz yassa / mafé / haricots rouges / pâtes fraîches (`needsSauce` ouvre le choix de la sauce) |
+| `SAUCES` | Les 7 sauces du menu pâtes. `extra` = supplément (truffe 4€, fromagère 2€) |
+| `GARNITURES` | Les 9 garnitures. `first` = supplément sur la garniture comprise · `extra` = prix d'une garniture en plus |
+| `SUPPLEMENTS` | Stracciatella / burrata 100g / version XXL |
+| `VIANDES` | Les 4 viandes et leur prix |
+| `ACCOMPAGNEMENT` | Libellé de l'accompagnement unique (pâtes fraîches fusili) |
 | `SAUCES_VIANDE` | Sauce verte / poivre |
-| `SUPPLEMENTS_VIANDE` | Brochettes x2 |
 | `TIRAMISU_PARFUMS` | Les parfums de tiramisu |
 | `MENU` | Les cards de la section carte (`cat` : `pates`, `viande`, `dessert`, `boisson`) |
 
@@ -82,19 +81,20 @@ Prix globaux : `PLAT_PRICE` (10€), `TIRAMISU_PRICE` (5€), `CANETTE_PRICE` (2
 ### La carte actuelle
 
 **🍝 Menu pâtes fraîches — plat à composer 10€** (1 sauce + 1 garniture)
-- Sauces : crème de champignons · base crème classique · base tomate · La Spéciale (crème + tomate) · crème de truffe **+4€** · L'Italiana
-- Garniture comprise : poulet, poulet effiloché, légumes, viande hachée, lardons de volaille · saumon fumé, kebab ou bœuf effiloché **+1€**
+- Sauces (7) : crème de champignons · base crème classique · base tomate · La Spéciale (crème + tomate) · sauce poivre · crème de truffe **+4€** · sauce fromagère **+2€**
+- Garnitures (9), une comprise : poulet, poulet effiloché, merguez, kebab, viande hachée, jambon blanc, lardon de volaille · saumon fumé ou bœuf effiloché **+1€**
 - Garniture en + : saumon fumé ou bœuf effiloché **3€** · autres garnitures **2€**
-- Suppléments : burrata 50g **3€** · burrata 100g **5€**
+- Suppléments : stracciatella **3€** · burrata 100g **5€** · version XXL **5€**
 
-**🔥 Menu viande** (1 accompagnement + 1 sauce compris)
-- Ailes de poulet x4 · Brochettes de poulet x3 — **15€**
-- Magret entier · Faux-filet · Gigot d'agneau · Assiette Bog (brochettes x2 + 2 ailes) — **20€**
-- Accompagnements : riz sauce yassa · riz sauce mafé · riz haricots rouges · pâtes fraîches sauce au choix
+**🔥 Menu viandes** (pâtes fraîches fusili + 1 sauce comprises)
+- Haut de cuisse de poulet sans os — **15€**
+- Magret entier · Gigot d'agneau en tranches — **20€**
+- Entrecôte Black Angus 300g — **25€**
+- Accompagnement unique : pâtes fraîches fusili, avec une des 7 sauces du menu pâtes
 - Sauces : sauce verte · poivre — sauce en + **0,50€**
-- Supplément : brochettes x2 **5€**
 
-**🍮 Et aussi**
+**🥗 Et aussi**
+- Salade de Burrata 100g **10€**
 - Tiramisu **5€** (M&M's, Spéculos, Oreo, classique cacao)
 - Canette **2€**, servie à part
 

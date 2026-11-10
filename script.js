@@ -27,11 +27,10 @@ const priceTag = (n) => (n > 0 ? ` <em>+${eur(n).replace(",00", "")}</em>` : "")
 function chipList(items, priceKey) {
   return items.map(i => {
     const ex = i[priceKey] || 0;
-    const flag = i.needsSauce ? ' data-needs-sauce="1"' : "";
     if (estEnSommeil(i.id)) {
       return `<button class="chip chip--out" disabled aria-disabled="true" title="Épuisé pour ce soir">${i.label} <em>épuisé</em></button>`;
     }
-    return `<button class="chip" data-value="${i.val}" data-val="${i.val}" data-extra="${ex}"${flag}>${i.label}${priceTag(ex)}</button>`;
+    return `<button class="chip" data-value="${i.val}" data-val="${i.val}" data-extra="${ex}">${i.label}${priceTag(ex)}</button>`;
   }).join("");
 }
 
@@ -39,6 +38,7 @@ function chipList(items, priceKey) {
 const CAT_ICON = {
   pates:       '<svg viewBox="0 0 32 32" fill="currentColor"><ellipse cx="16" cy="20" rx="13" ry="6" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5 18 Q16 14 27 18" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M10 15 Q12 11 14 15 M16 14 Q18 10 20 14 M22 15 Q24 11 26 15" stroke="currentColor" stroke-width="1.3" fill="none"/></svg>',
   viande:      '<svg viewBox="0 0 32 32" fill="currentColor"><path d="M4 26 L26 6" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M22 4 L28 10" stroke="currentColor" stroke-width="1.5" fill="none"/><ellipse cx="12" cy="18" rx="4.4" ry="3.4" transform="rotate(-45 12 18)" stroke="currentColor" stroke-width="1.5" fill="none"/><ellipse cx="19" cy="11" rx="4.4" ry="3.4" transform="rotate(-45 19 11)" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>',
+  fraicheur:   '<svg viewBox="0 0 32 32" fill="currentColor"><circle cx="16" cy="18" r="6" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M16 12 Q13 7 8 7 Q9 12 14 13" stroke="currentColor" stroke-width="1.4" fill="none"/><path d="M17 12 Q20 7 25 8 Q23 12 18 13" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>',
   dessert:     '<svg viewBox="0 0 32 32" fill="currentColor"><path d="M8 12 Q8 6 16 6 Q24 6 24 12 L24 14 L8 14 Z"/><rect x="10" y="14" width="12" height="10" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M11 18 L21 18 M11 21 L21 21" stroke="currentColor" stroke-width="1.5"/></svg>',
   boisson:     '<svg viewBox="0 0 32 32" fill="currentColor"><rect x="10" y="6" width="12" height="20" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="10" y="9" width="12" height="2"/><path d="M12 14 L20 14 M12 18 L20 18" stroke="currentColor" stroke-width="1.2"/></svg>',
 };
@@ -244,16 +244,13 @@ function viandeModal(prod) {
     <p class="modal__desc">${prod.desc}</p>
 
     <div class="modal__field">
-      <h5>1. Ton accompagnement</h5>
-      <div class="chips chips--wrap" id="mAccomp">${chipList(ACCOMPAGNEMENTS, "extra")}</div>
-      <div id="mPastaSauceWrap" hidden>
-        <p class="acc__hint">Sauce de tes pâtes fraîches :</p>
-        <div class="chips chips--wrap" id="mPastaSauce">${chipList(SAUCES, "extra")}</div>
-      </div>
+      <h5>1. La sauce de tes pâtes</h5>
+      <p class="acc__hint">Servi avec ${ACCOMPAGNEMENT.toLowerCase()} — choisis la sauce.</p>
+      <div class="chips chips--wrap" id="mPastaSauce">${chipList(SAUCES, "extra")}</div>
     </div>
 
     <div class="modal__field">
-      <h5>2. Ta sauce</h5>
+      <h5>2. Ta sauce d'accompagnement</h5>
       <div class="chips chips--wrap" id="mSauceViande">${chipList(SAUCES_VIANDE, "extra")}</div>
     </div>
 
@@ -263,12 +260,7 @@ function viandeModal(prod) {
     </div>
 
     <div class="modal__field">
-      <h5>4. Suppléments ${optLabel("facultatif")}</h5>
-      <div class="chips chips--wrap" id="mSuppViande">${chipList(SUPPLEMENTS_VIANDE, "extra")}</div>
-    </div>
-
-    <div class="modal__field">
-      <h5>5. Une précision ?</h5>
+      <h5>4. Une précision ?</h5>
       <textarea class="textarea" id="mNote" placeholder="Cuisson, allergies, sans tel ingrédient..."></textarea>
     </div>
 
@@ -324,8 +316,8 @@ function refreshModalPrice() {
 }
 
 /* ---------- MODAL BEHAVIOR ---------- */
-const MODAL_SINGLE = ["#mSauce", "#mGarniture", "#mTiramisu", "#mAccomp", "#mPastaSauce", "#mSauceViande"];
-const MODAL_MULTI  = ["#mGarnitureExtra", "#mSupp", "#mSauceExtra", "#mSuppViande"];
+const MODAL_SINGLE = ["#mSauce", "#mGarniture", "#mTiramisu", "#mPastaSauce", "#mSauceViande"];
+const MODAL_MULTI  = ["#mGarnitureExtra", "#mSupp", "#mSauceExtra"];
 
 document.addEventListener("click", (e) => {
   if (e.target.closest("[data-close]")) closeModal();
@@ -342,16 +334,6 @@ document.addEventListener("click", (e) => {
   MODAL_MULTI.forEach(id => {
     if (e.target.matches(`${id} .chip`)) e.target.classList.toggle("is-active");
   });
-
-  // Accompagnement "Pâtes fraîches" → sous-choix de la sauce
-  if (e.target.matches("#mAccomp .chip")) {
-    const wrap = $("#mPastaSauceWrap");
-    if (wrap) {
-      const needs = e.target.dataset.needsSauce === "1";
-      wrap.hidden = !needs;
-      if (!needs) $$("#mPastaSauce .chip").forEach(c => c.classList.remove("is-active"));
-    }
-  }
 
   if (e.target.matches(".modal .chip")) refreshModalPrice();
 
@@ -386,29 +368,17 @@ document.addEventListener("click", (e) => {
 
   // CONFIRM MENU VIANDE
   if (e.target.id === "confirmViande") {
-    const accomp = $("#mAccomp .chip.is-active");
-    const sauce  = $("#mSauceViande .chip.is-active");
-    if (!accomp) { alert("Choisis ton accompagnement."); return; }
-
     const pastaSauce = $("#mPastaSauce .chip.is-active");
-    if (accomp.dataset.needsSauce === "1" && !pastaSauce) {
-      alert("Choisis la sauce de tes pâtes fraîches.");
-      return;
-    }
-    if (!sauce) { alert("Choisis ta sauce."); return; }
+    const sauce = $("#mSauceViande .chip.is-active");
+    if (!pastaSauce) { alert("Choisis la sauce de tes pâtes."); return; }
+    if (!sauce) { alert("Choisis ta sauce d'accompagnement."); return; }
 
     const saucesEnPlus = $$("#mSauceExtra .chip.is-active");
-    const supps = $$("#mSuppViande .chip.is-active");
-    const note  = $("#mNote")?.value.trim();
-    const name  = e.target.dataset.name;
+    const note = $("#mNote")?.value.trim();
+    const name = e.target.dataset.name;
 
-    const accompLabel = pastaSauce
-      ? `Pâtes fraîches · ${chipLabel(pastaSauce)}`
-      : chipLabel(accomp);
-
-    const metaParts = [accompLabel, `Sauce : ${sauce.dataset.val}`];
+    const metaParts = [`${ACCOMPAGNEMENT} · ${chipLabel(pastaSauce)}`, `Sauce : ${sauce.dataset.val}`];
     if (saucesEnPlus.length) metaParts.push(`Sauce en + : ${saucesEnPlus.map(chipLabel).join(", ")}`);
-    if (supps.length) metaParts.push(`Sup. : ${supps.map(chipLabel).join(", ")}`);
     if (note) metaParts.push(note);
 
     addToCart({

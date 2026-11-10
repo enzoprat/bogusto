@@ -179,8 +179,12 @@
     }
 
     /* ---------- rendu ---------- */
+    /* Ne compte que les elements encore a la carte : si un plat disparait
+       de carte.js, son identifiant peut rester dans la base sans fausser le compteur. */
+    const IDS_CONNUS = new Set(GROUPES.flatMap(g => g.items.map(i => i.id)));
+
     function renderState() {
-      const n = sommeil.size;
+      const n = [...sommeil].filter(id => IDS_CONNUS.has(id)).length;
       $("#stateN").textContent = n;
       $("#stateTxt").textContent = n === 0
         ? "tout est disponible ce soir"
