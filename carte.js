@@ -89,7 +89,14 @@ const PHOTOS = new Set([
   "sv-verte", "sv-poivre", "salade", "tiramisu", "accompagnement",
 ]);
 
-const photoDe = (id) => (id && PHOTOS.has(id) ? `assets/plats/${id}.webp` : null);
+/* Boissons : pas de photo sur les flyers, on a dessiné des illustrations. */
+const ILLUSTRATIONS = { canette: "canette.svg", eau: "eau.svg" };
+
+const photoDe = (id) => {
+  if (!id) return null;
+  if (ILLUSTRATIONS[id]) return `assets/plats/${ILLUSTRATIONS[id]}`;
+  return PHOTOS.has(id) ? `assets/plats/${id}.webp` : null;
+};
 
 /* ---------- CARDS DE LA SECTION CARTE ---------- */
 const MENU = [

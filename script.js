@@ -182,7 +182,7 @@ function onAddProduct(id) {
     return;
   }
 
-  // Canette → ajout direct
+  // Salade, canette → ajout direct
   addToCart({
     productId: prod.id,
     name: prod.name,
@@ -190,6 +190,12 @@ function onAddProduct(id) {
     qty: 1,
     unitPrice: prod.price,
   });
+
+  // On propose boisson et dessert après un plat, jamais après une boisson
+  // ou un dessert — sinon le pop-up se rouvre en boucle.
+  if (prod.cat !== "boisson" && prod.cat !== "dessert") {
+    setTimeout(() => openModal(drinkPopupModal(prod.name)), 250);
+  }
 }
 
 /* ---------- MODALS ---------- */

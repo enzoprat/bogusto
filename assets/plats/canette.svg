@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Canette 33 cl">
+  <rect width="200" height="200" fill="#faf5eb"/>
+
+  <!-- ombre portée -->
+  <ellipse cx="100" cy="171" rx="34" ry="6" fill="#3a2818" opacity=".13"/>
+
+  <!-- corps de la canette -->
+  <path d="M69 48 h62 a4 4 0 0 1 4 4 v100 a14 10 0 0 1 -14 10 h-42 a14 10 0 0 1 -14 -10 v-100 a4 4 0 0 1 4 -4 z" fill="#a02828"/>
+  <!-- facette claire, pour le volume -->
+  <path d="M75 48 h16 v114 h-10 a12 9 0 0 1 -6 -5 z" fill="#ffffff" opacity=".17"/>
+  <path d="M124 48 h8 v109 a12 9 0 0 1 -8 5 z" fill="#3a2818" opacity=".15"/>
+
+  <!-- bandeau crème avec la feuille de basilic -->
+  <rect x="65" y="92" width="70" height="30" fill="#f5e8c8"/>
+  <path d="M100 99 c9 0 15 5 15 11 c-9 1 -15 -3 -15 -11 z" fill="#6e8c3a"/>
+  <path d="M100 99 c-9 0 -15 5 -15 11 c9 1 15 -3 15 -11 z" fill="#86a647"/>
+  <line x1="100" y1="99" x2="100" y2="114" stroke="#55702c" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- col et couvercle -->
+  <path d="M72 48 h56 l-4 -9 a5 5 0 0 0 -4 -3 h-40 a5 5 0 0 0 -4 3 z" fill="#c9ccd1"/>
+  <ellipse cx="100" cy="36" rx="28" ry="8" fill="#dfe2e6"/>
+  <ellipse cx="100" cy="35" rx="23" ry="6" fill="#b9bdc4"/>
+  <!-- languette -->
+  <ellipse cx="100" cy="34" rx="11" ry="4" fill="none" stroke="#8d939b" stroke-width="2"/>
+  <circle cx="100" cy="34" r="2.2" fill="#8d939b"/>
+</svg>
