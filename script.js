@@ -725,10 +725,10 @@ function renderCart() {
 }
 
 /* ---------- CRÉNEAUX DE RETRAIT ----------
-   Service du mercredi au dimanche, 19h → minuit. On propose les jours
+   Service du mardi au dimanche, 19h → minuit. On propose les jours
    ouverts des trois prochaines semaines, et pour aujourd'hui seulement
    les créneaux encore atteignables. */
-const JOURS_SERVICE = [3, 4, 5, 6, 0];   // mercredi → dimanche (0 = dimanche)
+const JOURS_SERVICE = [2, 3, 4, 5, 6, 0];   // mardi → dimanche (0 = dimanche)
 const OUVERTURE_H = 19;
 const DERNIER_CRENEAU = "23:45";
 const DELAI_PREPA_MIN = 20;              // marge avant le premier créneau du soir

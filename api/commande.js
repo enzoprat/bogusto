@@ -80,9 +80,9 @@ module.exports = async (req, res) => {
 };
 
 /* ---------- créneaux de retrait ----------
-   Service du mercredi au dimanche, 19h → minuit (dernier créneau 23h45). */
+   Service du mardi au dimanche, 19h → minuit (dernier créneau 23h45). */
 
-const JOURS_SERVICE = [3, 4, 5, 6, 0];   // mercredi → dimanche (0 = dimanche)
+const JOURS_SERVICE = [2, 3, 4, 5, 6, 0];   // mardi → dimanche (0 = dimanche)
 const PREMIER_CRENEAU = 19 * 60;
 const DERNIER_CRENEAU = 23 * 60 + 45;
 const HORIZON_JOURS = 30;
@@ -98,7 +98,7 @@ function creneauInvalide(iso, heure) {
     return "Ce jour de retrait n'existe pas.";
   }
   if (!JOURS_SERVICE.includes(jour.getUTCDay())) {
-    return "On ne sert que du mercredi au dimanche.";
+    return "On ne sert que du mardi au dimanche.";
   }
 
   const maintenant = new Date();
